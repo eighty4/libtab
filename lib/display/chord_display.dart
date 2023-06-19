@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/widgets.dart';
 import 'package:libtab/libtab.dart';
+import 'grid_painter.dart';
 
 class ChordChartDisplay extends StatelessWidget {
   static const Size defaultSize = Size(200, 250);
@@ -45,7 +46,10 @@ class ChordChartPainter extends CustomPainter {
     fretSpacing = size.height / 5;
     stringSpacing = size.width / (stringCount - 1);
     noteRadius = min(stringSpacing, fretSpacing) / 3;
-    drawFretsAndStrings(canvas, size);
+    GridPainter.paintGrid(tabContext, canvas, size,
+        verticalLines: stringCount, horizontalLines: 6);
+    canvas.drawRect(Rect.fromPoints(Offset.zero, Offset(size.width, 3)),
+        tabContext.chartPaint(PaintingStyle.fill));
     drawNote(canvas, size, chord.notes);
   }
 
@@ -60,28 +64,6 @@ class ChordChartPainter extends CustomPainter {
     if (note.and != null) {
       drawNote(canvas, size, note.and!);
     }
-  }
-
-  void drawFretsAndStrings(Canvas canvas, Size size) {
-    final path = Path();
-
-    // draw frets
-    for (var i = 0; i < 6; i++) {
-      var y = fretSpacing * i;
-      path.moveTo(0, y);
-      path.lineTo(size.width, y);
-    }
-
-    // draw strings
-    for (var i = 0; i < stringCount; i++) {
-      var x = stringSpacing * i;
-      path.moveTo(x, 0);
-      path.lineTo(x, size.height);
-    }
-
-    canvas.drawPath(path, tabContext.chartPaint(PaintingStyle.stroke));
-    canvas.drawRect(Rect.fromPoints(Offset.zero, Offset(size.width, 3)),
-        tabContext.chartPaint(PaintingStyle.fill));
   }
 
   @override

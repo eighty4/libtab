@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:libtab/libtab.dart';
+import 'grid_painter.dart';
 import 'note_positioning.dart';
 
 class MeasureDisplay extends StatelessWidget {
@@ -88,19 +89,9 @@ class MeasureChartPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    paintStrings(canvas, size);
+    GridPainter.paintGrid(tabContext, canvas, size,
+        verticalLines: 2, horizontalLines: instrument.stringCount());
     paintMeasureDecorations(canvas, size);
-  }
-
-  void paintStrings(Canvas canvas, Size size) {
-    final path = Path();
-    for (var i = 1; i < instrument.stringCount(); i++) {
-      final y = chartPositioning.stringSpacing * i;
-      path.moveTo(0, y);
-      path.lineTo(size.width, y);
-    }
-    path.addRect(Rect.fromPoints(Offset.zero, Offset(size.width, size.height)));
-    canvas.drawPath(path, tabContext.chartPaint(PaintingStyle.stroke));
   }
 
   void paintMeasureDecorations(Canvas canvas, Size size) {
