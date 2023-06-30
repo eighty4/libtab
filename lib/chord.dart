@@ -3,6 +3,7 @@ enum Chord {
   am,
   a7,
   am7,
+  b,
   bm,
   b7,
   c,
@@ -37,6 +38,8 @@ extension ChordLabelFn on Chord {
         return 'a7';
       case Chord.am7:
         return 'am7';
+      case Chord.b:
+        return 'b';
       case Chord.bm:
         return 'bm';
       case Chord.b7:
