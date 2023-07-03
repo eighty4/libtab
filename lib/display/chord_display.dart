@@ -50,7 +50,9 @@ class ChordChartPainter extends CustomPainter {
         verticalLines: stringCount, horizontalLines: 6);
     canvas.drawRect(Rect.fromPoints(Offset.zero, Offset(size.width, 3)),
         tabContext.chartPaint(PaintingStyle.fill));
-    drawNote(canvas, size, chord.notes);
+    if (chord.notes != null) {
+      drawNote(canvas, size, chord.notes!);
+    }
   }
 
   void drawNote(Canvas canvas, Size size, Note note) {

@@ -165,26 +165,53 @@ class Note {
 class ChordNoteSet {
   final Instrument instrument;
   final Chord chord;
-  final Note notes;
+  final Note? notes;
+
+  factory ChordNoteSet(Instrument instrument, Chord chord) {
+    late final Note? note;
+    switch (instrument) {
+      case Instrument.banjo:
+        if (chord == Chord.g) {
+          return ChordNoteSet.banjo(chord, null);
+        } else {
+          note = banjoChordNotes[chord];
+          assert(note != null);
+          return ChordNoteSet.banjo(chord, note);
+        }
+      case Instrument.guitar:
+        note = guitarChordNotes[chord];
+        assert(note != null);
+        return ChordNoteSet.guitar(chord, note);
+    }
+  }
 
   ChordNoteSet.banjo(this.chord, this.notes) : instrument = Instrument.banjo;
 
   ChordNoteSet.guitar(this.chord, this.notes) : instrument = Instrument.guitar;
-
-  ChordNoteSet(
-      {required this.instrument, required this.chord, required this.notes});
 }
 
-class BanjoChords {
-  static final ChordNoteSet c =
-      ChordNoteSet.banjo(Chord.c, Note(2, 1, and: Note(4, 2, and: Note(1, 2))));
-  static final ChordNoteSet d =
-      ChordNoteSet.banjo(Chord.d, Note(3, 2, and: Note(2, 3, and: Note(1, 4))));
-}
+final Map<Chord, Note?> banjoChordNotes = Map.unmodifiable({
+  Chord.a: Note(1, 2, and: Note(2, 2, and: Note(3, 2, and: Note(4, 2)))),
+  Chord.b: Note(1, 4, and: Note(2, 4, and: Note(3, 4, and: Note(4, 4)))),
+  Chord.c: Note(1, 2, and: Note(2, 1, and: Note(4, 2))),
+  Chord.d: Note(1, 4, and: Note(2, 3, and: Note(3, 2))),
+  Chord.e: Note(1, 2, and: Note(3, 1, and: Note(4, 2))),
+  Chord.f: Note(1, 3, and: Note(2, 1, and: Note(3, 2, and: Note(4, 3)))),
+  Chord.g: null,
+});
 
-class GuitarChords {
-  static final ChordNoteSet am = ChordNoteSet.guitar(
-      Chord.am, Note(2, 1, and: Note(3, 2, and: Note(4, 2))));
-  static final ChordNoteSet em =
-      ChordNoteSet.guitar(Chord.am, Note(4, 2, and: Note(5, 2)));
-}
+final banjoChords = List.unmodifiable(banjoChordNotes.keys);
+
+final Map<Chord, Note> guitarChordNotes = Map.unmodifiable({
+  Chord.a: Note(2, 2, and: Note(2, 3, and: Note(2, 4))),
+  Chord.am: Note(2, 1, and: Note(3, 2, and: Note(4, 2))),
+  Chord.b: Note(1, 2, and: Note(2, 4, and: Note(3, 4, and: Note(4, 4)))),
+  Chord.c: Note(1, 2, and: Note(2, 4, and: Note(3, 5))),
+  Chord.d: Note(1, 2, and: Note(2, 3, and: Note(3, 2))),
+  Chord.em: Note(4, 2, and: Note(5, 2)),
+  Chord.e: Note(3, 1, and: Note(4, 2, and: Note(5, 2))),
+  Chord.f: Note(1, 1, and: Note(1, 2, and: Note(2, 3, and: Note(3, 4)))),
+  Chord.g: Note(1, 3, and: Note(5, 2, and: Note(6, 3))),
+});
+
+final guitarChords = List.unmodifiable(guitarChordNotes.keys);
