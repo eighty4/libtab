@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:libtab/libtab.dart';
+
 import 'grid_painter.dart';
 import 'note_positioning.dart';
 
@@ -26,16 +27,15 @@ class MeasureDisplay extends StatelessWidget {
       return buildMeasure();
     }
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 25),
-          child: Text(label!,
-              style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
-                  color: tabContext.labelColor)),
-        ),
-        buildMeasure()
+        Text(label!,
+            style: TextStyle(
+                fontSize: 26,
+                fontWeight: FontWeight.bold,
+                color: tabContext.labelColor)),
+        const SizedBox(height: 25),
+        buildMeasure(),
       ],
     );
   }

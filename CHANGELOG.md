@@ -1,3 +1,7 @@
+## 0.0.3
+
+* MeasureDisplay no longer grows unconstrained to available space of parent
+
 ## 0.0.2
 
 * Added banjo and guitar major chords
