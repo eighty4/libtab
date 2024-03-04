@@ -23,7 +23,7 @@ jobs:
   analyze:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.flutter-version }}
@@ -34,7 +34,7 @@ jobs:
   format:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.flutter-version }}
@@ -48,7 +48,7 @@ jobs:
       matrix:
         flutter-version: [ '3.10.5', '3.7.0' ]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.flutter-version }}
@@ -59,7 +59,7 @@ jobs:
   publish-dry-run:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.flutter-version }}
