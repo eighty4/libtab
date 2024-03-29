@@ -11,7 +11,9 @@ class Measure {
       {required this.notes,
       this.repeatStart = false,
       this.repeatEnd = false,
-      this.chord});
+      this.chord}) {
+    assert(notes.every((note) => note.timing != Timing.unspecified));
+  }
 
   factory Measure.fromNoteList(List<Note?> input,
       {bool repeatStart = false, bool repeatEnd = false, Chord? chord}) {

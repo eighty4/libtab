@@ -43,11 +43,13 @@ class Timing {
   /// index of the [Note] in a [List]
   factory Timing.withinNoteList(
       {required int listLength, required int noteIndex}) {
+    assert(noteIndex > -1 && noteIndex < listLength);
     return Timing(notesPerMeasureToNoteType(listLength), noteIndex + 1);
   }
 
   /// Resolves [NoteType] based on the number of [Note]s in a measure
   static NoteType notesPerMeasureToNoteType(int noteCount) {
+    assert(noteCount <= 16);
     switch (noteCount) {
       case 16:
         return NoteType.sixteenth;

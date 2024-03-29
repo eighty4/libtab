@@ -11,6 +11,8 @@ extension on NotePositionMap {
   /// param for [Note.and]
   Offset addNotePosition(ChartPositioning chartPositioning, Note note,
       {int? sixteenthNth}) {
+    assert(note.and == null || note.timing == note.and?.timing);
+    assert(sixteenthNth == null || (sixteenthNth >= 1 && sixteenthNth <= 16));
     if (sixteenthNth == null) {
       sixteenthNth = note.timing.toSixteenthNth();
       if (this[sixteenthNth] == null) {
