@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:libtab/libtab.dart';
 
 /// Map of 16th note timings (1-16) to list of [NotePosition]s to be positioned

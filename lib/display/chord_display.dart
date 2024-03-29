@@ -1,6 +1,8 @@
 import 'dart:math';
+
 import 'package:flutter/widgets.dart';
 import 'package:libtab/libtab.dart';
+
 import 'grid_painter.dart';
 
 class ChordChartDisplay extends StatelessWidget {

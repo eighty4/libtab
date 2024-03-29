@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:libtab/libtab.dart';
 
 /// Container and calculator of [Canvas] spacing values for strings and notes
