@@ -164,7 +164,7 @@ class Note {
       slideTo: slideTo,
       hammerOn: hammerOn,
       pullOff: pullOff,
-      and: and,
+      and: and?.copyWithTiming(timing),
     );
   }
 

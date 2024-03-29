@@ -104,4 +104,20 @@ void main() {
     expect(
         measure.notes[15].timing, equals(const Timing(NoteType.sixteenth, 16)));
   });
+
+  test('Measure.fromNoteList syncs calculated timing with concurrent notes',
+      () {
+    final measure = Measure.fromNoteList([
+      Note(1, 2, and: Note(3, 4, and: Note(5, 6))),
+      Note(1, 2),
+      Note(3, 4),
+      Note(5, 6),
+    ]);
+    expect(measure.notes[0].timing, equals(const Timing(NoteType.quarter, 1)));
+    expect(measure.notes[0].timing, equals(measure.notes[0].and!.timing));
+    expect(measure.notes[0].timing, equals(measure.notes[0].and!.and!.timing));
+    expect(measure.notes[1].timing, equals(const Timing(NoteType.quarter, 2)));
+    expect(measure.notes[2].timing, equals(const Timing(NoteType.quarter, 3)));
+    expect(measure.notes[3].timing, equals(const Timing(NoteType.quarter, 4)));
+  });
 }
