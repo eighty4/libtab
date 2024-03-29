@@ -19,7 +19,7 @@ class Measure {
     for (int i = 0; i < input.length; i++) {
       var note = input[i];
       if (note != null) {
-        if (note.timing.nth == -1) {
+        if (note.timing == Timing.unspecified) {
           notes.add(note.copyWithTiming(
               Timing.withinNoteList(listLength: input.length, noteIndex: i)));
         } else {

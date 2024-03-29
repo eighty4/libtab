@@ -89,6 +89,17 @@ class Timing {
   String toString() {
     return 'Timing{type: $type, nth: $nth}';
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Timing &&
+          runtimeType == other.runtimeType &&
+          type == other.type &&
+          nth == other.nth;
+
+  @override
+  int get hashCode => type.hashCode ^ nth.hashCode;
 }
 
 class Note {
