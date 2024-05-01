@@ -202,25 +202,25 @@ class MeasureNotePainter extends CustomPainter {
   }
 
   void paintNote(Canvas canvas, Size size, Note note, Offset offset) {
-    // todo dynamic size and position
+    // todo dynamic size
     const double noteRadius = 12;
     final path = Path()
       ..addOval(Rect.fromCircle(center: offset, radius: noteRadius));
     canvas.drawShadow(path, tabContext.noteLabelColor, 6, false);
     canvas.drawPath(path, noteFillPaint);
 
-    final textStyle = TextStyle(color: tabContext.noteLabelColor, fontSize: 22);
+    final textStyle =
+        TextStyle(color: tabContext.noteLabelColor, fontSize: noteRadius * 1.5);
     final textSpan = TextSpan(text: note.fret.toString(), style: textStyle);
     final textPainter = TextPainter(
       text: textSpan,
       textDirection: TextDirection.ltr,
-      textAlign: TextAlign.center,
     );
-    textPainter.layout(
-      minWidth: 30,
-      maxWidth: size.width,
-    );
-    textPainter.paint(canvas, offset.translate(-15, -13));
+    textPainter.layout();
+    textPainter.paint(
+        canvas,
+        offset -
+            Offset(textPainter.size.width / 2, textPainter.size.height / 2));
 
     if (note.melody) {
       canvas.drawCircle(offset, noteRadius, noteLabelPaint);
