@@ -203,7 +203,9 @@ class MeasureNotePainter extends CustomPainter {
 
   void paintNote(Canvas canvas, Size size, Note note, Offset offset) {
     // todo dynamic size and position
-    final path = Path()..addOval(Rect.fromCircle(center: offset, radius: 12));
+    const double noteRadius = 12;
+    final path = Path()
+      ..addOval(Rect.fromCircle(center: offset, radius: noteRadius));
     canvas.drawShadow(path, tabContext.noteLabelColor, 6, false);
     canvas.drawPath(path, noteFillPaint);
 
@@ -221,7 +223,7 @@ class MeasureNotePainter extends CustomPainter {
     textPainter.paint(canvas, offset.translate(-15, -13));
 
     if (note.melody) {
-      canvas.drawCircle(offset, 16, noteLabelPaint);
+      canvas.drawCircle(offset, noteRadius, noteLabelPaint);
     }
   }
 
