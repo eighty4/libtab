@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/widgets.dart';
 import 'package:libtab/libtab.dart';
 
@@ -202,8 +204,8 @@ class MeasureNotePainter extends CustomPainter {
   }
 
   void paintNote(Canvas canvas, Size size, Note note, Offset offset) {
-    // todo dynamic size
-    const double noteRadius = 12;
+    final double noteRadius =
+        (min(size.width / 2, size.height) * .09).clamp(5, 20);
     final path = Path()
       ..addOval(Rect.fromCircle(center: offset, radius: noteRadius));
     canvas.drawShadow(path, tabContext.noteLabelColor, 6, false);
