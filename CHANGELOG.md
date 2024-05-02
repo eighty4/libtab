@@ -1,3 +1,8 @@
+## 0.0.5
+
+* MeasureDisplay dynamically sizes notation paints relative to canvas size
+* LibContext constructs Paint instances for reuse
+
 ## 0.0.4
 
 * Bug fix for Measure.fromNoteList not updating concurrently played Note.and notes with calculated

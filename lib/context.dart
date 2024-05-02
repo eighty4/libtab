@@ -2,46 +2,59 @@ import 'package:flutter/material.dart';
 
 class TabContext {
   final Color backgroundColor;
-  final Color chartColor;
-  final Color labelColor;
-  final Color noteLabelColor;
-  final Color noteShapeColor;
+  final Paint chartPaint;
+  final Color labelTextColor;
+  final Paint noteLabelPaint;
+  final Paint noteShapePaint;
+  final Paint techniquePaint;
 
   TabContext(
       {this.backgroundColor = Colors.transparent,
-      required this.chartColor,
-      required this.labelColor,
-      required this.noteLabelColor,
-      required this.noteShapeColor});
+      required Color chartColor,
+      required this.labelTextColor,
+      required Color noteLabelColor,
+      required Color noteShapeColor,
+      required Color techniqueColor})
+      : chartPaint = Paint()
+          ..color = chartColor
+          ..strokeWidth = 1
+          ..style = PaintingStyle.stroke,
+        noteLabelPaint = Paint()
+          ..color = noteLabelColor
+          ..strokeWidth = 2
+          ..style = PaintingStyle.stroke,
+        noteShapePaint = Paint()
+          ..color = noteShapeColor
+          ..style = PaintingStyle.fill,
+        techniquePaint = Paint()
+          ..color = techniqueColor
+          ..strokeWidth = 2
+          ..style = PaintingStyle.stroke;
 
-  TabContext.forBrightness(Brightness brightness)
-      : backgroundColor = Colors.transparent,
-        chartColor = Colors.blueGrey,
-        labelColor =
-            brightness == Brightness.dark ? Colors.white : Colors.black,
-        noteLabelColor =
-            brightness == Brightness.dark ? Colors.black : Colors.white,
-        noteShapeColor =
-            brightness == Brightness.dark ? Colors.white : Colors.black;
-
-  Paint chartPaint(PaintingStyle style, {double width = 1}) {
-    return Paint()
-      ..strokeWidth = width
-      ..style = style
-      ..color = chartColor;
+  factory TabContext.forBrightness(Brightness brightness) {
+    const backgroundColor = Colors.transparent;
+    const chartColor = Colors.blueGrey;
+    final labelColor =
+        brightness == Brightness.dark ? Colors.white : Colors.black;
+    final noteLabelColor =
+        brightness == Brightness.dark ? Colors.black : Colors.white;
+    final noteShapeColor =
+        brightness == Brightness.dark ? Colors.white : Colors.black;
+    const techniqueColor = Colors.blueGrey;
+    return TabContext(
+        backgroundColor: backgroundColor,
+        chartColor: chartColor,
+        labelTextColor: labelColor,
+        noteLabelColor: noteLabelColor,
+        noteShapeColor: noteShapeColor,
+        techniqueColor: techniqueColor);
   }
 
-  Paint noteLabelPaint(PaintingStyle style, {double width = 2}) {
-    return Paint()
-      ..strokeWidth = width
-      ..style = style
-      ..color = noteLabelColor;
-  }
+  Color get chartColor => chartPaint.color;
 
-  Paint noteShapePaint(PaintingStyle style, {double width = 2}) {
-    return Paint()
-      ..strokeWidth = width
-      ..style = style
-      ..color = noteShapeColor;
-  }
+  Color get noteLabelColor => noteLabelPaint.color;
+
+  Color get noteShapeColor => noteShapePaint.color;
+
+  Color get techniqueColor => techniquePaint.color;
 }

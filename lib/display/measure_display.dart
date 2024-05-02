@@ -35,7 +35,7 @@ class MeasureDisplay extends StatelessWidget {
             style: TextStyle(
                 fontSize: 26,
                 fontWeight: FontWeight.bold,
-                color: tabContext.labelColor)),
+                color: tabContext.labelTextColor)),
         const SizedBox(height: 25),
         buildMeasure(),
       ],
@@ -104,7 +104,7 @@ class MeasureChartPainter extends CustomPainter {
     if (measure.repeatStart || measure.repeatEnd) {
       addRepeatCirclesToPath(path, size);
     }
-    canvas.drawPath(path, tabContext.chartPaint(PaintingStyle.fill));
+    canvas.drawPath(path, tabContext.chartPaint);
   }
 
   void addRepeatBarsToPath(Path path, Size size) {
@@ -166,8 +166,6 @@ class MeasureNotePainter extends CustomPainter {
   final TabContext tabContext;
   final Measure measure;
   final Paint noteLabelPaint;
-  final Paint noteFillPaint;
-  final Paint noteStrokePaint;
   final ChartPositioning chartPositioning;
   final NotePositioning notePositioning;
 
@@ -176,9 +174,7 @@ class MeasureNotePainter extends CustomPainter {
       required this.measure,
       required this.chartPositioning,
       required this.notePositioning})
-      : noteLabelPaint = tabContext.noteLabelPaint(PaintingStyle.stroke),
-        noteFillPaint = tabContext.noteShapePaint(PaintingStyle.fill),
-        noteStrokePaint = tabContext.noteShapePaint(PaintingStyle.stroke);
+      : noteLabelPaint = tabContext.noteLabelPaint;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -209,7 +205,7 @@ class MeasureNotePainter extends CustomPainter {
     final path = Path()
       ..addOval(Rect.fromCircle(center: offset, radius: noteRadius));
     canvas.drawShadow(path, tabContext.noteLabelColor, 6, false);
-    canvas.drawPath(path, noteFillPaint);
+    canvas.drawPath(path, tabContext.noteShapePaint);
 
     final textStyle =
         TextStyle(color: tabContext.noteLabelColor, fontSize: noteRadius * 1.5);
@@ -225,7 +221,7 @@ class MeasureNotePainter extends CustomPainter {
             Offset(textPainter.size.width / 2, textPainter.size.height / 2));
 
     if (note.melody) {
-      canvas.drawCircle(offset, noteRadius, noteLabelPaint);
+      canvas.drawCircle(offset, noteRadius, tabContext.techniquePaint);
     }
   }
 
@@ -239,7 +235,7 @@ class MeasureNotePainter extends CustomPainter {
     final path = Path()
       ..moveTo(xFrom, y)
       ..quadraticBezierTo(xControl, yControl, xTo, y);
-    canvas.drawPath(path, noteStrokePaint);
+    canvas.drawPath(path, tabContext.techniquePaint);
   }
 
   void paintPullLine(
@@ -252,7 +248,7 @@ class MeasureNotePainter extends CustomPainter {
     final path = Path()
       ..moveTo(xFrom, y)
       ..quadraticBezierTo(xControl, yControl, xTo, y);
-    canvas.drawPath(path, noteStrokePaint);
+    canvas.drawPath(path, tabContext.techniquePaint);
   }
 
   void paintSlideLine(
@@ -261,7 +257,7 @@ class MeasureNotePainter extends CustomPainter {
     final path = Path()
       ..moveTo(noteOffset.dx + 8, y)
       ..lineTo(releaseOffset.dx - 8, y);
-    canvas.drawPath(path, noteStrokePaint);
+    canvas.drawPath(path, tabContext.techniquePaint);
   }
 
   @override

@@ -33,15 +33,13 @@ class ChordChartDisplay extends StatelessWidget {
 class ChordChartPainter extends CustomPainter {
   final TabContext tabContext;
   final ChordNoteSet chord;
-  final Paint notePaint;
   final int stringCount;
   double fretSpacing = 0;
   double stringSpacing = 0;
   double noteRadius = 0;
 
   ChordChartPainter(this.tabContext, this.chord)
-      : notePaint = tabContext.noteShapePaint(PaintingStyle.fill),
-        stringCount = chord.instrument.stringCount();
+      : stringCount = chord.instrument.stringCount();
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -51,7 +49,7 @@ class ChordChartPainter extends CustomPainter {
     GridPainter.paintGrid(tabContext, canvas, size,
         verticalLines: stringCount, horizontalLines: 6);
     canvas.drawRect(Rect.fromPoints(Offset.zero, Offset(size.width, 3)),
-        tabContext.chartPaint(PaintingStyle.fill));
+        tabContext.chartPaint);
     if (chord.notes != null) {
       drawNote(canvas, size, chord.notes!);
     }
@@ -63,7 +61,7 @@ class ChordChartPainter extends CustomPainter {
     final path = Path()
       ..addOval(Rect.fromCircle(center: Offset(x, y), radius: noteRadius));
     canvas.drawShadow(path, tabContext.noteLabelColor, 6, false);
-    canvas.drawPath(path, notePaint);
+    canvas.drawPath(path, tabContext.noteShapePaint);
 
     if (note.and != null) {
       drawNote(canvas, size, note.and!);
