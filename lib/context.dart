@@ -1,4 +1,9 @@
-import 'package:flutter/material.dart';
+import 'dart:ui';
+
+const _black = Color(0xFF000000);
+const _grey = Color(0xFF607D8B);
+const _transparent = Color(0x00000000);
+const _white = Color(0xFFFFFFFF);
 
 class TabContext {
   final Color backgroundColor;
@@ -9,7 +14,7 @@ class TabContext {
   final Paint techniquePaint;
 
   TabContext(
-      {this.backgroundColor = Colors.transparent,
+      {this.backgroundColor = _transparent,
       required Color chartColor,
       required this.labelTextColor,
       required Color noteLabelColor,
@@ -32,15 +37,12 @@ class TabContext {
           ..style = PaintingStyle.stroke;
 
   factory TabContext.forBrightness(Brightness brightness) {
-    const backgroundColor = Colors.transparent;
-    const chartColor = Colors.blueGrey;
-    final labelColor =
-        brightness == Brightness.dark ? Colors.white : Colors.black;
-    final noteLabelColor =
-        brightness == Brightness.dark ? Colors.black : Colors.white;
-    final noteShapeColor =
-        brightness == Brightness.dark ? Colors.white : Colors.black;
-    const techniqueColor = Colors.blueGrey;
+    const backgroundColor = _transparent;
+    const chartColor = _grey;
+    final labelColor = brightness == Brightness.dark ? _white : _black;
+    final noteLabelColor = brightness == Brightness.dark ? _black : _white;
+    final noteShapeColor = brightness == Brightness.dark ? _white : _black;
+    const techniqueColor = _grey;
     return TabContext(
         backgroundColor: backgroundColor,
         chartColor: chartColor,
