@@ -104,7 +104,7 @@ class MeasureChartPainter extends CustomPainter {
     if (measure.repeatStart || measure.repeatEnd) {
       addRepeatCirclesToPath(path, size);
     }
-    canvas.drawPath(path, tabContext.chartPaint);
+    canvas.drawPath(path, tabContext.chartFillPaint);
   }
 
   void addRepeatBarsToPath(Path path, Size size) {

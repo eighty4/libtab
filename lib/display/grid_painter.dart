@@ -22,7 +22,7 @@ class GridPainter extends CustomPainter {
         path.lineTo(x, size.height);
       }
     }
-    canvas.drawPath(path, tabContext.chartPaint);
+    canvas.drawPath(path, tabContext.chartStrokePaint);
   }
 
   final TabContext tabContext;

@@ -49,7 +49,7 @@ class ChordChartPainter extends CustomPainter {
     GridPainter.paintGrid(tabContext, canvas, size,
         verticalLines: stringCount, horizontalLines: 6);
     canvas.drawRect(Rect.fromPoints(Offset.zero, Offset(size.width, 3)),
-        tabContext.chartPaint);
+        tabContext.chartFillPaint);
     if (chord.notes != null) {
       drawNote(canvas, size, chord.notes!);
     }

@@ -7,7 +7,8 @@ const _white = Color(0xFFFFFFFF);
 
 class TabContext {
   final Color backgroundColor;
-  final Paint chartPaint;
+  final Paint chartFillPaint;
+  final Paint chartStrokePaint;
   final Color labelTextColor;
   final Paint noteLabelPaint;
   final Paint noteShapePaint;
@@ -20,7 +21,10 @@ class TabContext {
       required Color noteLabelColor,
       required Color noteShapeColor,
       required Color techniqueColor})
-      : chartPaint = Paint()
+      : chartFillPaint = Paint()
+          ..color = chartColor
+          ..style = PaintingStyle.fill,
+        chartStrokePaint = Paint()
           ..color = chartColor
           ..strokeWidth = 1
           ..style = PaintingStyle.stroke,
@@ -52,7 +56,7 @@ class TabContext {
         techniqueColor: techniqueColor);
   }
 
-  Color get chartColor => chartPaint.color;
+  Color get chartColor => chartFillPaint.color;
 
   Color get noteLabelColor => noteLabelPaint.color;
 
