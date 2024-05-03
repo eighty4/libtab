@@ -200,11 +200,20 @@ class MeasureNotePainter extends CustomPainter {
   }
 
   void paintNote(Canvas canvas, Size size, Note note, Offset offset) {
-    final double noteRadius =
-        (min(size.width / 2, size.height) * .09).clamp(5, 20);
+    const double minNoteRadius = 3;
+    const double maxNoteRadius = 20;
+    const double noteRadiusRangeDiff = maxNoteRadius - minNoteRadius;
+    const double minShadowElevation = 1;
+    const double maxShadowElevation = 5;
+    final double noteRadius = (min(size.width / 2, size.height) * .09)
+        .clamp(minNoteRadius, maxNoteRadius);
+    final shadowElevation =
+        ((noteRadius - minNoteRadius) / noteRadiusRangeDiff) *
+            maxShadowElevation;
     final path = Path()
       ..addOval(Rect.fromCircle(center: offset, radius: noteRadius));
-    canvas.drawShadow(path, tabContext.noteLabelColor, 6, false);
+    canvas.drawShadow(path, tabContext.noteLabelColor,
+        max(minShadowElevation, shadowElevation), false);
     canvas.drawPath(path, tabContext.noteShapePaint);
 
     final textStyle =
