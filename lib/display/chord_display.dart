@@ -56,11 +56,15 @@ class ChordChartPainter extends CustomPainter {
   }
 
   void drawNote(Canvas canvas, Size size, Note note) {
+    const double minShadowElevation = 2;
+    const double maxShadowElevation = 5;
     final x = size.width - (note.string - 1) * stringSpacing;
     final y = ((note.fret - 1) * fretSpacing) + (fretSpacing / 2);
     final path = Path()
       ..addOval(Rect.fromCircle(center: Offset(x, y), radius: noteRadius));
-    canvas.drawShadow(path, tabContext.noteLabelColor, 6, false);
+    final shadowElevation =
+        (noteRadius / 2).clamp(minShadowElevation, maxShadowElevation);
+    canvas.drawShadow(path, tabContext.noteLabelColor, shadowElevation, false);
     canvas.drawPath(path, tabContext.noteShapePaint);
 
     if (note.and != null) {
