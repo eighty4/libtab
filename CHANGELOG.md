@@ -1,3 +1,7 @@
+## 0.0.7
+
+* ChordChartDisplay's shadows around notes are scaled proportional to their radius
+
 ## 0.0.6
 
 * MeasureDisplay's shadows around notes are scaled proportional to their radius 
