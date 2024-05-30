@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 env:
-  flutter-version: 3.19.6
+  flutter-version: 3.22.1
 
 jobs:
   verified:
