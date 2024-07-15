@@ -2,9 +2,31 @@ import 'dart:ui';
 
 import 'package:libtab/libtab.dart';
 
+/// Pair of [Note] data with the [Offset] paint position
+class NotePosition {
+  final Note note;
+  final Offset offset;
+
+  NotePosition(this.note, this.offset);
+}
+
 /// Map of 16th note timings (1-16) to list of [NotePosition]s to be positioned
 /// at the same y position
 typedef NotePositionMap = Map<int, List<NotePosition>>;
+
+/// Calculated [Offset]s for positioning a [Technique]
+class TechniquePosition {
+  final Technique technique;
+  final Offset from;
+  final Offset to;
+
+  TechniquePosition(this.technique, this.from, this.to)
+      : assert(from.dy == to.dy, '${from.dy} != ${to.dy}');
+}
+
+/// List of [TechniquePosition] containers of [Offset]s specifying the [Note]
+/// positions a [Technique] would be played
+typedef TechniquePositionList = List<TechniquePosition>;
 
 extension on NotePositionMap {
   /// Adds [NotePosition]s for a [Note], recursively calling with sixteenthNote
@@ -28,10 +50,6 @@ extension on NotePositionMap {
   }
 }
 
-/// List of [TechniquePosition] containers of [Offset]s specifying the [Note]
-/// positions a [Technique] would be played
-typedef TechniquePositionList = List<TechniquePosition>;
-
 /// Adds a [TechniquePosition] and a [NotePosition] to [NotePositionMap] for the
 /// additional note played by the [Technique]
 extension on TechniquePositionList {
@@ -49,7 +67,7 @@ extension on TechniquePositionList {
   }
 }
 
-/// Container and calculator for [NotePositionMap]
+/// Container for calculated [NotePosition] values
 class NotePositioning {
   final NotePositionMap notes;
   final TechniquePositionList techniques;
@@ -80,22 +98,4 @@ class NotePositioning {
 
     return NotePositioning(notePositions, techniquePositions);
   }
-}
-
-/// Pair of [Note] data with the [Offset] paint position
-class NotePosition {
-  final Note note;
-  final Offset offset;
-
-  NotePosition(this.note, this.offset);
-}
-
-/// Calculated [Offset]s for positioning a [Technique]
-class TechniquePosition {
-  final Technique technique;
-  final Offset from;
-  final Offset to;
-
-  TechniquePosition(this.technique, this.from, this.to)
-      : assert(from.dy == to.dy, '${from.dy} != ${to.dy}');
 }

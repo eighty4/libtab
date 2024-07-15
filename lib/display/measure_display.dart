@@ -44,8 +44,6 @@ class MeasureDisplay extends StatelessWidget {
 
   Container buildMeasure() {
     final chartPositioning = ChartPositioning.calculate(size, instrument);
-    final notePositioning =
-        NotePositioning.calculate(measure.notes, chartPositioning);
     final chartPaint = CustomPaint(
         size: size,
         painter: MeasureChartPainter(
@@ -54,19 +52,26 @@ class MeasureDisplay extends StatelessWidget {
             measure: measure,
             last: last,
             chartPositioning: chartPositioning));
-    final notesPaint = CustomPaint(
+    return Container(
+        color: tabContext.backgroundColor,
+        child: Stack(
+          children: [
+            chartPaint,
+            if (measure.notes.isNotEmpty) buildNotePainter(chartPositioning)
+          ],
+        ));
+  }
+
+  CustomPaint buildNotePainter(chartPositioning) {
+    final notePositioning =
+        NotePositioning.calculate(measure.notes, chartPositioning);
+    return CustomPaint(
         size: size,
         painter: MeasureNotePainter(
             tabContext: tabContext,
             measure: measure,
             chartPositioning: chartPositioning,
             notePositioning: notePositioning));
-    final List<Widget> children = [chartPaint, notesPaint];
-    return Container(
-        color: tabContext.backgroundColor,
-        child: Stack(
-          children: children,
-        ));
   }
 }
 

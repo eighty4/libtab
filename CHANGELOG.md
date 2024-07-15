@@ -1,3 +1,7 @@
+## 0.0.8
+
+* MeasureDisplay without notes skips NotePositioning and renders chart without any notes
+
 ## 0.0.7
 
 * ChordChartDisplay's shadows around notes are scaled proportional to their radius
