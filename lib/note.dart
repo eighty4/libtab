@@ -173,6 +173,17 @@ class Note {
   Timing sustainReleaseTiming() {
     return timing + (length ?? Timing(timing.type, timing.nth + 1));
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Note &&
+          runtimeType == other.runtimeType &&
+          string == other.string &&
+          timing == other.timing;
+
+  @override
+  int get hashCode => string.hashCode ^ timing.hashCode;
 }
 
 class ChordNoteSet {

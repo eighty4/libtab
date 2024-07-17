@@ -1,6 +1,7 @@
 ## 0.0.8
 
 * MeasureDisplay without notes skips NotePositioning and renders chart without any notes
+* Note equality overrides
 
 ## 0.0.7
 
