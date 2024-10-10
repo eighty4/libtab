@@ -4,51 +4,32 @@ import 'package:libtab/libtab.dart';
 
 /// Container and calculator of [Canvas] spacing values for strings and notes
 class ChartPositioning {
+  /// Spacing between sixteenth notes on x-axis
   final double sixteenthSpacing;
-  final double eighthSpacing;
-  final double quarterSpacing;
-  final double halfSpacing;
+
+  /// Spacing between strings on y-axis
   final double stringSpacing;
+
+  /// Horizontal padding on the edges of a measure before first note
+  final double xOffset;
 
   ChartPositioning(
       {required this.sixteenthSpacing,
-      required this.eighthSpacing,
-      required this.quarterSpacing,
-      required this.halfSpacing,
-      required this.stringSpacing});
+      required this.stringSpacing,
+      required this.xOffset});
 
   factory ChartPositioning.calculate(Size size, Instrument instrument) {
-    final eighthSpacing = size.width / 9;
-    final quarterSpacing = eighthSpacing * 2;
-    final stringSpacing = size.height / (instrument.stringCount() - 1);
     return ChartPositioning(
-      sixteenthSpacing: eighthSpacing / 2,
-      eighthSpacing: eighthSpacing,
-      quarterSpacing: quarterSpacing,
-      halfSpacing: quarterSpacing * 2,
-      stringSpacing: stringSpacing,
+      sixteenthSpacing: size.width / 18,
+      stringSpacing: size.height / (instrument.stringCount() - 1),
+      xOffset: size.width / 9,
     );
   }
 
   Offset position(Note note) => Offset(xPosition(note), yPosition(note));
 
   double xPosition(Note note) =>
-      note.timing.nth * noteSpacing(note.timing.type);
+      xOffset + (note.timing.toSixteenthNth() - 1) * sixteenthSpacing;
 
   double yPosition(Note note) => (note.string - 1) * stringSpacing;
-
-  double noteSpacing(NoteType noteType) {
-    switch (noteType) {
-      case NoteType.whole:
-        return 1;
-      case NoteType.half:
-        return halfSpacing;
-      case NoteType.quarter:
-        return quarterSpacing;
-      case NoteType.eighth:
-        return eighthSpacing;
-      case NoteType.sixteenth:
-        return sixteenthSpacing;
-    }
-  }
 }

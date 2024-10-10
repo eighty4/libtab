@@ -28,60 +28,32 @@ enum Chord {
 }
 
 extension ChordLabelFn on Chord {
-  String id() {
-    switch (this) {
-      case Chord.a:
-        return 'a';
-      case Chord.am:
-        return 'am';
-      case Chord.a7:
-        return 'a7';
-      case Chord.am7:
-        return 'am7';
-      case Chord.b:
-        return 'b';
-      case Chord.bm:
-        return 'bm';
-      case Chord.b7:
-        return 'b7';
-      case Chord.c:
-        return 'c';
-      case Chord.cm:
-        return 'cm';
-      case Chord.c7:
-        return 'c7';
-      case Chord.d:
-        return 'd';
-      case Chord.dm:
-        return 'dm';
-      case Chord.d7:
-        return 'd7';
-      case Chord.dm7:
-        return 'dm7';
-      case Chord.e:
-        return 'e';
-      case Chord.em:
-        return 'em';
-      case Chord.e7:
-        return 'e7';
-      case Chord.emaj7:
-        return 'emaj7';
-      case Chord.f:
-        return 'f';
-      case Chord.fm:
-        return 'fm';
-      case Chord.fmaj7:
-        return 'fmaj7';
-      case Chord.fm7:
-        return 'fm7';
-      case Chord.g:
-        return 'g';
-      case Chord.gm:
-        return 'gm';
-      case Chord.g7:
-        return 'g7';
-      case Chord.gsus4:
-        return 'gsus4';
-    }
-  }
+  String id() => switch (this) {
+        Chord.a => 'a',
+        Chord.am => 'am',
+        Chord.a7 => 'a7',
+        Chord.am7 => 'am7',
+        Chord.b => 'b',
+        Chord.bm => 'bm',
+        Chord.b7 => 'b7',
+        Chord.c => 'c',
+        Chord.cm => 'cm',
+        Chord.c7 => 'c7',
+        Chord.d => 'd',
+        Chord.dm => 'dm',
+        Chord.d7 => 'd7',
+        Chord.dm7 => 'dm7',
+        Chord.e => 'e',
+        Chord.em => 'em',
+        Chord.e7 => 'e7',
+        Chord.emaj7 => 'emaj7',
+        Chord.f => 'f',
+        Chord.fm => 'fm',
+        Chord.fmaj7 => 'fmaj7',
+        Chord.fm7 => 'fm7',
+        Chord.g => 'g',
+        Chord.gm => 'gm',
+        Chord.g7 => 'g7',
+        Chord.gsus4 => 'gsus4'
+      };
 }

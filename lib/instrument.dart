@@ -4,12 +4,6 @@ enum Instrument {
 }
 
 extension StringsFn on Instrument {
-  int stringCount() {
-    switch (this) {
-      case Instrument.banjo:
-        return 5;
-      case Instrument.guitar:
-        return 6;
-    }
-  }
+  int stringCount() =>
+      switch (this) { Instrument.banjo => 5, Instrument.guitar => 6 };
 }

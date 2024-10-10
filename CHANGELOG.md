@@ -1,3 +1,11 @@
+## 0.0.10
+
+* BUGFIX for whole, quarter and half note calculations by NotePositioning
+* BREAKING CHANGE by upgrading to Dart 3
+* BREAKING CHANGE by removing excessive delegate methods for positioning calculations
+* BREAKING CHANGE by private scoping chord finger position data in libtab/note.dart
+* BREAKING CHANGE by removing const from Timing constructor
+
 ## 0.0.9
 
 * ChordChartDisplay and MeasureDisplay repaints when painter params update

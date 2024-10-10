@@ -162,14 +162,8 @@ class MeasureChartPainter extends CustomPainter {
 extension RepeatCircleCenterFns on Instrument {
   double topRepeatCircleCenter() => 1.5;
 
-  double bottomRepeatCircleCenter() {
-    switch (this) {
-      case Instrument.banjo:
-        return 2.5;
-      case Instrument.guitar:
-        return 3.5;
-    }
-  }
+  double bottomRepeatCircleCenter() =>
+      switch (this) { Instrument.banjo => 2.5, Instrument.guitar => 3.5 };
 }
 
 class MeasureNotePainter extends CustomPainter {

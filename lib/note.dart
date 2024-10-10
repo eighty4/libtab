@@ -6,30 +6,18 @@ enum Finger { t, m, i }
 enum NoteType { whole, half, quarter, eighth, sixteenth }
 
 extension NotesPerMeasureFn on NoteType {
-  /// How many notes this note type is played in a measure
-  int notesPerMeasure() {
-    switch (this) {
-      case NoteType.whole:
-        return 1;
-      case NoteType.half:
-        return 2;
-      case NoteType.quarter:
-        return 4;
-      case NoteType.eighth:
-        return 8;
-      case NoteType.sixteenth:
-        return 16;
-    }
-  }
-
-  /// How many sixteenth notes a beat lasts for this note type
-  int toSixteenthNotesPerBeat() {
-    return (16 / notesPerMeasure()).round();
-  }
+  /// How many notes this note type occurs in a measure
+  int notesPerMeasure() => switch (this) {
+        NoteType.whole => 1,
+        NoteType.half => 2,
+        NoteType.quarter => 4,
+        NoteType.eighth => 8,
+        NoteType.sixteenth => 16
+      };
 }
 
 class Timing {
-  static const Timing unspecified = Timing(NoteType.eighth, -1);
+  static const Timing unspecified = Timing._(NoteType.eighth, -1);
 
   /// Type of note
   final NoteType type;
@@ -37,7 +25,22 @@ class Timing {
   /// 1-indexed placement in measure
   final int nth;
 
-  const Timing(this.type, this.nth);
+  Timing(this.type, this.nth) {
+    assert(nth > 0);
+    assert(nth <= type.notesPerMeasure());
+  }
+
+  Timing.ofWholeNote(int nth) : this(NoteType.whole, nth);
+
+  Timing.ofHalfNote(int nth) : this(NoteType.half, nth);
+
+  Timing.ofQuarterNote(int nth) : this(NoteType.quarter, nth);
+
+  Timing.ofEighthNote(int nth) : this(NoteType.eighth, nth);
+
+  Timing.ofSixteenthNote(int nth) : this(NoteType.sixteenth, nth);
+
+  const Timing._(this.type, this.nth);
 
   /// Create a [Timing] for a [Note] using [Timing.unspecified] based on the
   /// index of the [Note] in a [List]
@@ -50,24 +53,14 @@ class Timing {
   /// Resolves [NoteType] based on the number of [Note]s in a measure
   static NoteType notesPerMeasureToNoteType(int noteCount) {
     assert(noteCount <= 16);
-    switch (noteCount) {
-      case 16:
-        return NoteType.sixteenth;
-      case 8:
-        return NoteType.eighth;
-      case 4:
-        return NoteType.quarter;
-      case 2:
-        return NoteType.half;
-      case 1:
-        return NoteType.whole;
-      default:
-        if (noteCount < 8) {
-          return NoteType.eighth;
-        } else {
-          return NoteType.sixteenth;
-        }
-    }
+    return switch (noteCount) {
+      16 => NoteType.sixteenth,
+      8 => NoteType.eighth,
+      4 => NoteType.quarter,
+      2 => NoteType.half,
+      1 => NoteType.whole,
+      _ => noteCount < 8 ? NoteType.eighth : NoteType.sixteenth
+    };
   }
 
   Timing operator +(Timing timing) => add(timing);
@@ -78,13 +71,17 @@ class Timing {
     } else {
       final sixteenthNth = toSixteenthNth() + timing.toSixteenthNth();
       assert(sixteenthNth < 17);
-      return Timing(NoteType.sixteenth, sixteenthNth);
+      return Timing.ofSixteenthNote(sixteenthNth);
     }
   }
 
   /// Resolves the [Timing.nth] value as a [NoteType.sixteenth] note
   int toSixteenthNth() {
-    return nth == 1 ? 1 : type.toSixteenthNotesPerBeat() * nth - 1;
+    if (nth == 1) {
+      return 1;
+    } else {
+      return (16 ~/ type.notesPerMeasure()) * (nth - 1) + 1;
+    }
   }
 
   @override
@@ -192,29 +189,21 @@ class ChordNoteSet {
   final Note? notes;
 
   factory ChordNoteSet(Instrument instrument, Chord chord) {
-    late final Note? note;
-    switch (instrument) {
-      case Instrument.banjo:
-        if (chord == Chord.g) {
-          return ChordNoteSet.banjo(chord, null);
-        } else {
-          note = banjoChordNotes[chord];
-          assert(note != null);
-          return ChordNoteSet.banjo(chord, note);
-        }
-      case Instrument.guitar:
-        note = guitarChordNotes[chord];
-        assert(note != null);
-        return ChordNoteSet.guitar(chord, note);
-    }
+    return ChordNoteSet._(
+        chord: chord,
+        instrument: instrument,
+        notes: switch (instrument) {
+          Instrument.banjo =>
+            chord == Chord.g ? null : _banjoChordNotes[chord]!,
+          Instrument.guitar => _guitarChordNotes[chord]!
+        });
   }
 
-  ChordNoteSet.banjo(this.chord, this.notes) : instrument = Instrument.banjo;
-
-  ChordNoteSet.guitar(this.chord, this.notes) : instrument = Instrument.guitar;
+  ChordNoteSet._(
+      {required this.chord, required this.instrument, required this.notes});
 }
 
-final Map<Chord, Note?> banjoChordNotes = Map.unmodifiable({
+final Map<Chord, Note?> _banjoChordNotes = Map.unmodifiable({
   Chord.a: Note(1, 2, and: Note(2, 2, and: Note(3, 2, and: Note(4, 2)))),
   Chord.b: Note(1, 4, and: Note(2, 4, and: Note(3, 4, and: Note(4, 4)))),
   Chord.c: Note(1, 2, and: Note(2, 1, and: Note(4, 2))),
@@ -224,9 +213,9 @@ final Map<Chord, Note?> banjoChordNotes = Map.unmodifiable({
   Chord.g: null,
 });
 
-final banjoChords = List.unmodifiable(banjoChordNotes.keys);
+final banjoChords = List.unmodifiable(_banjoChordNotes.keys);
 
-final Map<Chord, Note> guitarChordNotes = Map.unmodifiable({
+final Map<Chord, Note> _guitarChordNotes = Map.unmodifiable({
   Chord.a: Note(2, 2, and: Note(2, 3, and: Note(2, 4))),
   Chord.am: Note(2, 1, and: Note(3, 2, and: Note(4, 2))),
   Chord.b: Note(1, 2, and: Note(2, 4, and: Note(3, 4, and: Note(4, 4)))),
@@ -238,4 +227,4 @@ final Map<Chord, Note> guitarChordNotes = Map.unmodifiable({
   Chord.g: Note(1, 3, and: Note(5, 2, and: Note(6, 3))),
 });
 
-final guitarChords = List.unmodifiable(guitarChordNotes.keys);
+final guitarChords = List.unmodifiable(_guitarChordNotes.keys);
