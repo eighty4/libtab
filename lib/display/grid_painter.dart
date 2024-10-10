@@ -43,5 +43,8 @@ class GridPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) => false;
+  bool shouldRepaint(GridPainter oldDelegate) =>
+      !identical(horizontalLines, oldDelegate.horizontalLines) ||
+      !identical(tabContext, oldDelegate.tabContext) ||
+      !identical(verticalLines, oldDelegate.verticalLines);
 }

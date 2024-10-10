@@ -1,3 +1,7 @@
+## 0.0.9
+
+* ChordChartDisplay and MeasureDisplay repaints when painter params update
+
 ## 0.0.8
 
 * MeasureDisplay without notes skips NotePositioning and renders chart without any notes

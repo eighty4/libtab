@@ -73,5 +73,11 @@ class ChordChartPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) => false;
+  bool shouldRepaint(ChordChartPainter oldDelegate) =>
+      !identical(chord, oldDelegate.chord) ||
+      !identical(fretSpacing, oldDelegate.fretSpacing) ||
+      !identical(noteRadius, oldDelegate.noteRadius) ||
+      !identical(stringCount, oldDelegate.stringCount) ||
+      !identical(stringSpacing, oldDelegate.stringSpacing) ||
+      !identical(tabContext, oldDelegate.tabContext);
 }

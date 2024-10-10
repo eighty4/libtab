@@ -151,7 +151,12 @@ class MeasureChartPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) => false;
+  bool shouldRepaint(MeasureChartPainter oldDelegate) =>
+      !identical(chartPositioning, oldDelegate.chartPositioning) ||
+      !identical(instrument, oldDelegate.instrument) ||
+      !identical(last, oldDelegate.last) ||
+      !identical(measure, oldDelegate.measure) ||
+      !identical(tabContext, oldDelegate.tabContext);
 }
 
 extension RepeatCircleCenterFns on Instrument {
@@ -275,5 +280,10 @@ class MeasureNotePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) => false;
+  bool shouldRepaint(MeasureNotePainter oldDelegate) =>
+      !identical(chartPositioning, oldDelegate.chartPositioning) ||
+      !identical(measure, oldDelegate.measure) ||
+      !identical(noteLabelPaint, oldDelegate.noteLabelPaint) ||
+      !identical(notePositioning, oldDelegate.notePositioning) ||
+      !identical(tabContext, oldDelegate.tabContext);
 }
