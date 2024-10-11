@@ -6,8 +6,9 @@ on:
   pull_request:
     branches: [ main ]
 
+# keep test.strategy.matrix.flutter-version in sync
 env:
-  flutter-version: 3.22.1
+  flutter-version: 3.24.3
 
 jobs:
   verified:
@@ -46,7 +47,7 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        flutter-version: [ '3.19.4', '3.10.5', '3.7.0' ]
+        flutter-version: [ '3.10.0', '3.24.3' ]
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
