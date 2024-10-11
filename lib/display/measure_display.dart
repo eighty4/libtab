@@ -44,34 +44,30 @@ class MeasureDisplay extends StatelessWidget {
 
   Container buildMeasure() {
     final chartPositioning = ChartPositioning.calculate(size, instrument);
-    final chartPaint = CustomPaint(
-        size: size,
-        painter: MeasureChartPainter(
-            tabContext: tabContext,
-            instrument: instrument,
-            measure: measure,
-            last: last,
-            chartPositioning: chartPositioning));
+    final notePositioning =
+        NotePositioning.calculate(measure.notes, chartPositioning);
     return Container(
         color: tabContext.backgroundColor,
         child: Stack(
           children: [
-            chartPaint,
-            if (measure.notes.isNotEmpty) buildNotePainter(chartPositioning)
+            CustomPaint(
+                size: size,
+                painter: MeasureChartPainter(
+                    tabContext: tabContext,
+                    instrument: instrument,
+                    measure: measure,
+                    last: last,
+                    chartPositioning: chartPositioning)),
+            if (measure.notes.isNotEmpty)
+              CustomPaint(
+                  size: size,
+                  painter: MeasureNotePainter(
+                      tabContext: tabContext,
+                      measure: measure,
+                      chartPositioning: chartPositioning,
+                      notePositioning: notePositioning)),
           ],
         ));
-  }
-
-  CustomPaint buildNotePainter(chartPositioning) {
-    final notePositioning =
-        NotePositioning.calculate(measure.notes, chartPositioning);
-    return CustomPaint(
-        size: size,
-        painter: MeasureNotePainter(
-            tabContext: tabContext,
-            measure: measure,
-            chartPositioning: chartPositioning,
-            notePositioning: notePositioning));
   }
 }
 
