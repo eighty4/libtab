@@ -1,5 +1,6 @@
 ## 0.0.10
 
+* Removed a Center widget around contents of ChordChartDisplay
 * BUGFIX for whole, quarter and half note calculations by NotePositioning
 * BREAKING CHANGE by upgrading to Dart 3
 * BREAKING CHANGE by removing excessive delegate methods for positioning calculations

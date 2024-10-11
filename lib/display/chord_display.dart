@@ -19,14 +19,12 @@ class ChordChartDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-          color: tabContext.backgroundColor,
-          child: CustomPaint(
-              willChange: false,
-              size: size,
-              painter: ChordChartPainter(tabContext, chord))),
-    );
+    return Container(
+        color: tabContext.backgroundColor,
+        child: CustomPaint(
+            willChange: false,
+            size: size,
+            painter: ChordChartPainter(tabContext, chord)));
   }
 }
 
