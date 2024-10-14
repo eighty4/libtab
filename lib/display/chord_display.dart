@@ -5,6 +5,9 @@ import 'package:libtab/libtab.dart';
 
 import 'grid_painter.dart';
 
+// todo omit nut and indicate chord positions up the neck from first fret
+// todo support banjo finger indicators (thumb, index, middle)
+// todo support painting guitar strum indicators (open, close)
 class ChordChartDisplay extends StatelessWidget {
   static const Size defaultSize = Size(200, 250);
   final TabContext tabContext;
@@ -21,10 +24,34 @@ class ChordChartDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         color: tabContext.backgroundColor,
+        child: chord.noData
+            ? buildDataUnavailable()
+            : CustomPaint(
+                willChange: false,
+                size: size,
+                painter: ChordChartPainter(tabContext, chord)));
+  }
+
+  Widget buildDataUnavailable() {
+    return Stack(children: [
+      Opacity(
+        opacity: .3,
         child: CustomPaint(
             willChange: false,
             size: size,
-            painter: ChordChartPainter(tabContext, chord)));
+            painter: ChordChartPainter(tabContext, chord)),
+      ),
+      Positioned.fromRect(
+          rect: Rect.fromPoints(Offset.zero, size.bottomRight(Offset.zero)),
+          child: Center(
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                Text('Chord ${chord.chord.label()}'),
+                const Text('unavailable'),
+                Text('for ${chord.instrument.label()}'),
+              ])))
+    ]);
   }
 }
 

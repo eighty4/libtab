@@ -1,3 +1,14 @@
+## 0.0.11
+
+* Extended chord data for ChordChartDisplay
+* ChordNoteSet shows an unsupported state instead of throwing an error for a chord and instrument
+  combo that is unsupported and ChordChartDisplay will build a user friendly message
+* Added Chord.a.label() and Instrument.banjo.label() methods to Chord and Instrument for user facing
+  labels of Chord and Instrument values
+* BREAKING CHANGE by moving exported banjoChords and guitarChords data to
+  ChordNoteSet.availableChordCharts
+* BREAKING CHANGE by renaming StringsFn to InstrumentStringCountFn
+
 ## 0.0.10
 
 * Removed a Center widget around contents of ChordChartDisplay

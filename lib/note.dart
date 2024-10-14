@@ -1,5 +1,4 @@
 import 'chord.dart';
-import 'instrument.dart';
 
 enum Finger { t, m, i }
 
@@ -182,49 +181,3 @@ class Note {
   @override
   int get hashCode => string.hashCode ^ timing.hashCode;
 }
-
-class ChordNoteSet {
-  final Instrument instrument;
-  final Chord chord;
-  final Note? notes;
-
-  factory ChordNoteSet(Instrument instrument, Chord chord) {
-    return ChordNoteSet._(
-        chord: chord,
-        instrument: instrument,
-        notes: switch (instrument) {
-          Instrument.banjo =>
-            chord == Chord.g ? null : _banjoChordNotes[chord]!,
-          Instrument.guitar => _guitarChordNotes[chord]!
-        });
-  }
-
-  ChordNoteSet._(
-      {required this.chord, required this.instrument, required this.notes});
-}
-
-final Map<Chord, Note?> _banjoChordNotes = Map.unmodifiable({
-  Chord.a: Note(1, 2, and: Note(2, 2, and: Note(3, 2, and: Note(4, 2)))),
-  Chord.b: Note(1, 4, and: Note(2, 4, and: Note(3, 4, and: Note(4, 4)))),
-  Chord.c: Note(1, 2, and: Note(2, 1, and: Note(4, 2))),
-  Chord.d: Note(1, 4, and: Note(2, 3, and: Note(3, 2))),
-  Chord.e: Note(1, 2, and: Note(3, 1, and: Note(4, 2))),
-  Chord.f: Note(1, 3, and: Note(2, 1, and: Note(3, 2, and: Note(4, 3)))),
-  Chord.g: null,
-});
-
-final banjoChords = List.unmodifiable(_banjoChordNotes.keys);
-
-final Map<Chord, Note> _guitarChordNotes = Map.unmodifiable({
-  Chord.a: Note(2, 2, and: Note(2, 3, and: Note(2, 4))),
-  Chord.am: Note(2, 1, and: Note(3, 2, and: Note(4, 2))),
-  Chord.b: Note(1, 2, and: Note(2, 4, and: Note(3, 4, and: Note(4, 4)))),
-  Chord.c: Note(1, 2, and: Note(2, 4, and: Note(3, 5))),
-  Chord.d: Note(1, 2, and: Note(2, 3, and: Note(3, 2))),
-  Chord.em: Note(4, 2, and: Note(5, 2)),
-  Chord.e: Note(3, 1, and: Note(4, 2, and: Note(5, 2))),
-  Chord.f: Note(1, 1, and: Note(1, 2, and: Note(2, 3, and: Note(3, 4)))),
-  Chord.g: Note(1, 3, and: Note(5, 2, and: Note(6, 3))),
-});
-
-final guitarChords = List.unmodifiable(_guitarChordNotes.keys);
