@@ -10,3 +10,4 @@ export 'instrument.dart';
 export 'measure.dart';
 export 'note.dart';
 export 'technique.dart';
+export 'timing.dart';

@@ -1,5 +1,6 @@
 import 'chord.dart';
 import 'note.dart';
+import 'timing.dart';
 
 class Measure {
   final Chord? chord;
