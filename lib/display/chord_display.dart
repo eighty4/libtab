@@ -5,6 +5,8 @@ import 'package:libtab/libtab.dart';
 
 import 'grid_painter.dart';
 
+/// Displays a chart of a [Chord] and [Instrument] finger formation specified
+/// by a [ChordNoteSet]
 // todo omit nut and indicate chord positions up the neck from first fret
 // todo support banjo finger indicators (thumb, index, middle)
 // todo support painting guitar strum indicators (open, close)
@@ -55,6 +57,8 @@ class ChordChartDisplay extends StatelessWidget {
   }
 }
 
+/// Paints a chart of a [Chord] and [Instrument] finger formation specified
+/// by a [ChordNoteSet]
 class ChordChartPainter extends CustomPainter {
   final TabContext tabContext;
   final ChordNoteSet chord;

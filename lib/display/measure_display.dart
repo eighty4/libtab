@@ -6,6 +6,7 @@ import 'package:libtab/libtab.dart';
 import 'grid_painter.dart';
 import 'note_positioning.dart';
 
+/// Displays a [Measure] of tab data that can be styled with [TabContext]
 class MeasureDisplay extends StatelessWidget {
   static const defaultSize = Size(300, 200);
   final TabContext tabContext;
@@ -71,6 +72,7 @@ class MeasureDisplay extends StatelessWidget {
   }
 }
 
+/// Paints a [Measure] of tab data that can be styled with [TabContext]
 class MeasureChartPainter extends CustomPainter {
   static const double barPad = 3;
   static const double fatBar = 5;

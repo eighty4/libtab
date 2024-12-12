@@ -18,6 +18,7 @@ class ChartPositioning {
       required this.stringSpacing,
       required this.xOffset});
 
+  /// Builds a ChartPositioning for the given size and instrument
   factory ChartPositioning.calculate(Size size, Instrument instrument) {
     return ChartPositioning(
       sixteenthSpacing: size.width / 18,
@@ -26,10 +27,13 @@ class ChartPositioning {
     );
   }
 
+  /// The center of a [Note] placement on a chart
   Offset position(Note note) => Offset(xPosition(note), yPosition(note));
 
+  /// A Note's center's x position on a chart
   double xPosition(Note note) =>
       xOffset + (note.timing.toSixteenthNth() - 1) * sixteenthSpacing;
 
+  /// A Note's center's y position on a chart
   double yPosition(Note note) => (note.string - 1) * stringSpacing;
 }
