@@ -11,10 +11,11 @@ on:
       - pubspec.*
   pull_request:
     branches: [ main ]
+  workflow_call:
 
 # keep test.strategy.matrix.flutter-version in sync
 env:
-  flutter-version: 3.24.3
+  flutter-version: 3.27.1
 
 jobs:
   verified:
@@ -31,10 +32,9 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
+      - uses: flutter-actions/setup-flutter@v4
         with:
-          flutter-version: ${{ env.flutter-version }}
-          channel: 'stable'
+          cache-sdk: true
       - name: analyze
         run: flutter analyze
 
@@ -42,10 +42,9 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
+      - uses: flutter-actions/setup-flutter@v4
         with:
-          flutter-version: ${{ env.flutter-version }}
-          channel: 'stable'
+          cache-sdk: true
       - name: format
         run: dart format lib test --set-exit-if-changed
 
@@ -53,13 +52,13 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        flutter-version: [ '3.10.0', '3.24.3' ]
+        flutter-version: [ '3.10.0', '3.24.3', '3.27.1' ]
     steps:
       - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
+      - uses: flutter-actions/setup-flutter@v4
         with:
-          flutter-version: ${{ matrix.flutter-version }}
-          channel: 'stable'
+          cache-sdk: true
+          version: ${{ matrix.flutter-version }}
       - name: test
         run: flutter test
 
@@ -67,9 +66,8 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
+      - uses: flutter-actions/setup-flutter@v4
         with:
-          flutter-version: ${{ env.flutter-version }}
-          channel: 'stable'
+          cache-sdk: true
       - name: publish dry run
         run: flutter packages pub publish --dry-run

@@ -1,0 +1,54 @@
+name: Release (tag)
+run-name: "Release: tag a `${{ inputs.semver_bump }}` release"
+
+on:
+  workflow_dispatch:
+    inputs:
+      semver_bump:
+        type: choice
+        options:
+          - breaking
+          - major
+          - minor
+          - patch
+        default: patch
+
+concurrency: release
+
+jobs:
+
+  verify:
+    uses: ./.github/workflows/verify.yml
+
+  prepare:
+    runs-on: ubuntu-latest
+    needs: verify
+    permissions:
+      actions: write
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+      - name: bump semver ${{ inputs.semver_bump }}
+        id: bump
+        run: |
+          dart pub bump ${{ inputs.semver_bump }}
+          VERSION=$(grep "version: " pubspec.yaml | cut -d ' ' -f2)
+          DATE="$(git show -s --format=%ci $HASH | cut -c1-10)"
+          TAG="v$VERSION"
+          sed -i \
+              -e 's/## Unreleased - ReleaseDate/## Unreleased - ReleaseDate\n\n## '$VERSION' - '$DATE'/' \
+              -e 's/\.\.\.HEAD/...'$TAG'/' \
+              -e 's/\[Unreleased\]/[Unreleased]: https:\/\/github.com\/eighty4\/libtab\/compare\/'$TAG'...HEAD\n['$VERSION']/' \
+              CHANGELOG.md
+          git add CHANGELOG.md pubspec.yaml
+          git config --global user.name "Adam McKee"
+          git config --global user.email "adam.be.g84d@gmail.com"
+          git commit -m "publishing $VERSION to pub.dev"
+          git tag "$TAG"
+          git push --atomic origin main "$TAG"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+      - name: gh workflow run release_publish.yml
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run release_publish.yml --ref ${{ steps.bump.outputs.tag }}

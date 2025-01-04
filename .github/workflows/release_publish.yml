@@ -1,0 +1,25 @@
+name: Release (publish)
+run-name: "Release: publish `${{ github.ref }}` to pub.dev"
+
+on:
+  workflow_dispatch:
+
+concurrency: release
+
+jobs:
+
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - name: fail if ref == main
+        if: github.ref == 'refs/heads/main'
+        run: exit 1
+      - uses: actions/checkout@v4
+      - uses: flutter-actions/setup-flutter@v4
+        with:
+          cache-sdk: true
+      - uses: flutter-actions/setup-pubdev-credentials@v1
+      - name: flutter pub publish
+        run: flutter pub publish -f
