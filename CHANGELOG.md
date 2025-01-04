@@ -2,6 +2,8 @@
 
 ## Unreleased - ReleaseDate
 
+## 0.0.12 - 2025-01-03
+
 * Fix debug assertion triggered by MeasureDisplay using NotePositioning without any note data
 
 ## 0.0.11 - 2024-12-17
@@ -63,7 +65,8 @@
 
 * Model types and widgets for modeling musical chords and measures
 
-[Unreleased]: https://github.com/eighty4/libtab/compare/v0.0.11...HEAD
+[Unreleased]: https://github.com/eighty4/libtab/compare/v0.0.12...HEAD
+[0.0.12]: https://github.com/eighty4/libtab/compare/v0.0.11...v0.0.12
 [0.0.11]: https://github.com/eighty4/libtab/compare/v0.0.10...v0.0.11
 [0.0.10]: https://github.com/eighty4/libtab/compare/v0.0.9...v0.0.10
 [0.0.9]: https://github.com/eighty4/libtab/compare/v0.0.8...v0.0.9
