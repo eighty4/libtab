@@ -45,8 +45,6 @@ class MeasureDisplay extends StatelessWidget {
 
   Container buildMeasure() {
     final chartPositioning = ChartPositioning.calculate(size, instrument);
-    final notePositioning =
-        NotePositioning.calculate(measure.notes, chartPositioning);
     return Container(
         color: tabContext.backgroundColor,
         child: Stack(
@@ -66,7 +64,8 @@ class MeasureDisplay extends StatelessWidget {
                       tabContext: tabContext,
                       measure: measure,
                       chartPositioning: chartPositioning,
-                      notePositioning: notePositioning)),
+                      notePositioning: NotePositioning.calculate(
+                          measure.notes, chartPositioning))),
           ],
         ));
   }

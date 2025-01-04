@@ -2,6 +2,8 @@
 
 ## Unreleased - ReleaseDate
 
+* Fix debug assertion triggered by MeasureDisplay using NotePositioning without any note data
+
 ## 0.0.11 - 2024-12-17
 
 * Extended chord data for ChordChartDisplay
