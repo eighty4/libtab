@@ -3,6 +3,12 @@ name: CI
 on:
   push:
     branches: [ main ]
+    paths:
+      - .github/workflows/verify.yml
+      - lib/**
+      - test/**
+      - analysis_options.yaml
+      - pubspec.*
   pull_request:
     branches: [ main ]
 
