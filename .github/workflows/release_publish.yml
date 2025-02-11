@@ -23,3 +23,17 @@ jobs:
       - uses: flutter-actions/setup-pubdev-credentials@v1
       - name: flutter pub publish
         run: flutter pub publish -f
+
+  create-gh-release:
+    runs-on: ubuntu-latest
+    needs: publish
+    permissions:
+      contents: write
+    steps:
+      - run: |
+          TAG=${GITHUB_REF##*/}
+          VERSION=${TAG:1}
+          RELEASE_NOTES=$(./.github/workflows/changelog_get.sh CHANGELOG.md $VERSION)
+          PUB_URL="https://pub.dev/packages/libtab/versions/$VERSION"
+          echo "[Published on pub.dev]($PUB_URL)\r\n\r\n### Release notes\r\n\r\n$RELEASE_NOTES" > release_notes.md
+          gh release create "$TAG" --latest --notes-file release_notes.md --title "$TAG"

@@ -28,19 +28,15 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+      - run: ./.github/workflows/changelog_check.sh CHANGELOG.md
       - uses: dart-lang/setup-dart@v1
       - name: bump semver ${{ inputs.semver_bump }}
         id: bump
         run: |
           dart pub bump ${{ inputs.semver_bump }}
           VERSION=$(grep "version: " pubspec.yaml | cut -d ' ' -f2)
-          DATE="$(git show -s --format=%ci $HASH | cut -c1-10)"
           TAG="v$VERSION"
-          sed -i \
-              -e 's/## Unreleased - ReleaseDate/## Unreleased - ReleaseDate\n\n## '$VERSION' - '$DATE'/' \
-              -e 's/\.\.\.HEAD/...'$TAG'/' \
-              -e 's/\[Unreleased\]/[Unreleased]: https:\/\/github.com\/eighty4\/libtab\/compare\/'$TAG'...HEAD\n['$VERSION']/' \
-              CHANGELOG.md
+          ./.github/workflows/changelog_rollover.sh CHANGELOG.md "$TAG" "$VERSION"
           git add CHANGELOG.md pubspec.yaml
           git config --global user.name "Adam McKee"
           git config --global user.email "adam.be.g84d@gmail.com"
