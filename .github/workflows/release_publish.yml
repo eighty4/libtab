@@ -1,5 +1,5 @@
-name: Release (publish)
-run-name: "Release: publish `${{ github.ref }}` to pub.dev"
+name: Publish to pub.dev
+run-name: "Release: publish `${{ github.ref_name }}` to pub.dev"
 
 on:
   workflow_dispatch:
@@ -24,16 +24,15 @@ jobs:
       - name: flutter pub publish
         run: flutter pub publish -f
 
-  create-gh-release:
-    runs-on: ubuntu-latest
+  release-notes:
     needs: publish
-    permissions:
-      contents: write
-    steps:
-      - run: |
-          TAG=${GITHUB_REF##*/}
-          VERSION=${TAG:1}
-          RELEASE_NOTES=$(./.github/workflows/changelog_get.sh CHANGELOG.md $VERSION)
-          PUB_URL="https://pub.dev/packages/libtab/versions/$VERSION"
-          echo "[Published on pub.dev]($PUB_URL)\r\n\r\n### Release notes\r\n\r\n$RELEASE_NOTES" > release_notes.md
-          gh release create "$TAG" --latest --notes-file release_notes.md --title "$TAG"
+    uses: ./.github/workflows/release_notes.yml
+    with:
+      git_tag: ${{ github.ref_name }}
+
+  gh-release:
+    needs: release-notes
+    uses: ./.github/workflows/gh_release.yml
+    with:
+      notes: ${{ needs.release-notes.outputs.notes }}
+      tag: ${{ github.ref_name }}

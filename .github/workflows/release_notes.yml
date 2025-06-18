@@ -1,0 +1,45 @@
+name: Create release notes
+run-name: Create ${{ inputs.git_tag }} release notes
+
+on:
+  workflow_call:
+    inputs:
+      git_tag:
+        type: string
+        required: true
+    outputs:
+      notes:
+        value: ${{ jobs.create.outputs.notes }}
+
+jobs:
+  create:
+    runs-on: ubuntu-latest
+    outputs:
+      notes: ${{ steps.notes.outputs.notes }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-tags: true
+          ref: ${{ inputs.git_tag }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 23
+      - run: npm i -g @eighty4/changelog
+      - id: notes
+        env:
+          GIT_TAG: ${{ inputs.git_tag }}
+        run: |
+          VERSION=${GIT_TAG:1}
+          echo "#### Published to pub.dev as [libtab](https://pub.dev/packages/libtab/versions/$VERSION)" >> release_notes.md
+          echo >> release_notes.md
+          echo "\`\`\`dart pub add libtab@$VERSION\`\`\`" >> release_notes.md
+          echo >> release_notes.md
+
+          echo "## Release notes" >> release_notes.md
+          echo >> release_notes.md
+          changelog get "$CHANGELOG_TAG" >> release_notes.md
+          echo >> release_notes.md
+
+          RELEASE_NOTES=$(cat release_notes.md | base64 -w 0)
+          echo "notes=$RELEASE_NOTES" >> "$GITHUB_OUTPUT"
+

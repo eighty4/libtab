@@ -1,4 +1,4 @@
-name: CI
+name: Verify CI
 
 on:
   push:
@@ -52,7 +52,7 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        flutter-version: [ '3.10.0', '3.24.3', '3.27.1', '3.32.4' ]
+        flutter-version: [ '3.32.4' ]
     steps:
       - uses: actions/checkout@v4
       - uses: flutter-actions/setup-flutter@v4

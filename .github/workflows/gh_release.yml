@@ -1,0 +1,29 @@
+name: GitHub Release
+run-name: Create ${{ inputs.tag }} GitHub release
+
+on:
+  workflow_call:
+    inputs:
+      notes:
+        type: string
+        required: true
+      tag:
+        type: string
+        required: true
+
+jobs:
+  create-gh-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: create github release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          echo "${{ inputs.notes  }}" | base64 --decode > release_notes.md
+          gh release create "${{ inputs.tag }}" \
+            --repo="${{ github.repository }}" \
+            --latest \
+            --notes-file release_notes.md \
+            --title "${{ inputs.tag }}"
