@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+* Fix bug determining default timing for a pull-off, hammer-on or slide
+
 ## [v0.0.12] - 2025-01-03
 
 * Fix debug assertion triggered by MeasureDisplay using NotePositioning without any note data

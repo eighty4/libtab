@@ -70,7 +70,9 @@ class Note {
   }
 
   Timing sustainReleaseTiming() {
-    return timing + (length ?? Timing(timing.type, timing.nth + 1));
+    return length == null
+        ? Timing(timing.type, timing.nth + 1)
+        : timing + length!;
   }
 
   @override
