@@ -16,13 +16,15 @@ class MeasureDisplay extends StatelessWidget {
   final Measure measure;
   final String? label;
 
-  const MeasureDisplay(this.measure,
-      {super.key,
-      this.size = defaultSize,
-      required this.tabContext,
-      required this.instrument,
-      this.label,
-      this.last = false});
+  const MeasureDisplay(
+    this.measure, {
+    super.key,
+    this.size = defaultSize,
+    required this.tabContext,
+    required this.instrument,
+    this.label,
+    this.last = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -32,11 +34,14 @@ class MeasureDisplay extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(label!,
-            style: TextStyle(
-                fontSize: 26,
-                fontWeight: FontWeight.bold,
-                color: tabContext.labelTextColor)),
+        Text(
+          label!,
+          style: TextStyle(
+            fontSize: 26,
+            fontWeight: FontWeight.bold,
+            color: tabContext.labelTextColor,
+          ),
+        ),
         const SizedBox(height: 25),
         buildMeasure(),
       ],
@@ -46,28 +51,35 @@ class MeasureDisplay extends StatelessWidget {
   Container buildMeasure() {
     final chartPositioning = ChartPositioning.calculate(size, instrument);
     return Container(
-        color: tabContext.backgroundColor,
-        child: Stack(
-          children: [
+      color: tabContext.backgroundColor,
+      child: Stack(
+        children: [
+          CustomPaint(
+            size: size,
+            painter: MeasureChartPainter(
+              tabContext: tabContext,
+              instrument: instrument,
+              measure: measure,
+              last: last,
+              chartPositioning: chartPositioning,
+            ),
+          ),
+          if (measure.notes.isNotEmpty)
             CustomPaint(
-                size: size,
-                painter: MeasureChartPainter(
-                    tabContext: tabContext,
-                    instrument: instrument,
-                    measure: measure,
-                    last: last,
-                    chartPositioning: chartPositioning)),
-            if (measure.notes.isNotEmpty)
-              CustomPaint(
-                  size: size,
-                  painter: MeasureNotePainter(
-                      tabContext: tabContext,
-                      measure: measure,
-                      chartPositioning: chartPositioning,
-                      notePositioning: NotePositioning.calculate(
-                          measure.notes, chartPositioning))),
-          ],
-        ));
+              size: size,
+              painter: MeasureNotePainter(
+                tabContext: tabContext,
+                measure: measure,
+                chartPositioning: chartPositioning,
+                notePositioning: NotePositioning.calculate(
+                  measure.notes,
+                  chartPositioning,
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
   }
 }
 
@@ -84,17 +96,23 @@ class MeasureChartPainter extends CustomPainter {
   final ChartPositioning chartPositioning;
   final TabContext tabContext;
 
-  MeasureChartPainter(
-      {required this.instrument,
-      required this.last,
-      required this.measure,
-      required this.chartPositioning,
-      required this.tabContext});
+  MeasureChartPainter({
+    required this.instrument,
+    required this.last,
+    required this.measure,
+    required this.chartPositioning,
+    required this.tabContext,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
-    GridPainter.paintGrid(tabContext, canvas, size,
-        verticalLines: 2, horizontalLines: instrument.stringCount());
+    GridPainter.paintGrid(
+      tabContext,
+      canvas,
+      size,
+      verticalLines: 2,
+      horizontalLines: instrument.stringCount(),
+    );
     paintMeasureDecorations(canvas, size);
   }
 
@@ -111,8 +129,10 @@ class MeasureChartPainter extends CustomPainter {
 
   void addRepeatBarsToPath(Path path, Size size) {
     final fat = Rect.fromPoints(Offset.zero, Offset(fatBar, size.height));
-    final thin = Rect.fromPoints(const Offset(fatBar + barPad, 0),
-        Offset(fatBar + thinBar + barPad, size.height));
+    final thin = Rect.fromPoints(
+      const Offset(fatBar + barPad, 0),
+      Offset(fatBar + thinBar + barPad, size.height),
+    );
     if (measure.repeatStart) {
       path.addRect(fat);
       path.addRect(thin);
@@ -120,23 +140,26 @@ class MeasureChartPainter extends CustomPainter {
     if (measure.repeatEnd || last) {
       path.addRect(fat.translate(size.width - fat.width, 0));
       path.addRect(
-          thin.translate(size.width - (thin.left * 2) - thin.width, 0));
+        thin.translate(size.width - (thin.left * 2) - thin.width, 0),
+      );
     }
   }
 
   void addRepeatCirclesToPath(Path path, Size size) {
     final top = Rect.fromCircle(
-        center: Offset(
-            repeatDot,
-            chartPositioning.stringSpacing *
-                instrument.topRepeatCircleCenter()),
-        radius: repeatDotRadius);
+      center: Offset(
+        repeatDot,
+        chartPositioning.stringSpacing * instrument.topRepeatCircleCenter(),
+      ),
+      radius: repeatDotRadius,
+    );
     final bottom = Rect.fromCircle(
-        center: Offset(
-            repeatDot,
-            chartPositioning.stringSpacing *
-                instrument.bottomRepeatCircleCenter()),
-        radius: repeatDotRadius);
+      center: Offset(
+        repeatDot,
+        chartPositioning.stringSpacing * instrument.bottomRepeatCircleCenter(),
+      ),
+      radius: repeatDotRadius,
+    );
     if (measure.repeatStart) {
       path.addOval(top);
       path.addOval(bottom);
@@ -159,8 +182,10 @@ class MeasureChartPainter extends CustomPainter {
 extension RepeatCircleCenterFns on Instrument {
   double topRepeatCircleCenter() => 1.5;
 
-  double bottomRepeatCircleCenter() =>
-      switch (this) { Instrument.banjo => 2.5, Instrument.guitar => 3.5 };
+  double bottomRepeatCircleCenter() => switch (this) {
+    Instrument.banjo => 2.5,
+    Instrument.guitar => 3.5,
+  };
 }
 
 class MeasureNotePainter extends CustomPainter {
@@ -170,12 +195,12 @@ class MeasureNotePainter extends CustomPainter {
   final ChartPositioning chartPositioning;
   final NotePositioning notePositioning;
 
-  MeasureNotePainter(
-      {required this.tabContext,
-      required this.measure,
-      required this.chartPositioning,
-      required this.notePositioning})
-      : noteLabelPaint = tabContext.noteLabelPaint;
+  MeasureNotePainter({
+    required this.tabContext,
+    required this.measure,
+    required this.chartPositioning,
+    required this.notePositioning,
+  }) : noteLabelPaint = tabContext.noteLabelPaint;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -206,19 +231,27 @@ class MeasureNotePainter extends CustomPainter {
     const double noteRadiusRangeDiff = maxNoteRadius - minNoteRadius;
     const double minShadowElevation = 1;
     const double maxShadowElevation = 5;
-    final double noteRadius = (min(size.width / 2, size.height) * .09)
-        .clamp(minNoteRadius, maxNoteRadius);
+    final double noteRadius = (min(size.width / 2, size.height) * .09).clamp(
+      minNoteRadius,
+      maxNoteRadius,
+    );
     final shadowElevation =
         ((noteRadius - minNoteRadius) / noteRadiusRangeDiff) *
-            maxShadowElevation;
+        maxShadowElevation;
     final path = Path()
       ..addOval(Rect.fromCircle(center: offset, radius: noteRadius));
-    canvas.drawShadow(path, tabContext.noteLabelColor,
-        max(minShadowElevation, shadowElevation), false);
+    canvas.drawShadow(
+      path,
+      tabContext.noteLabelColor,
+      max(minShadowElevation, shadowElevation),
+      false,
+    );
     canvas.drawPath(path, tabContext.noteShapePaint);
 
-    final textStyle =
-        TextStyle(color: tabContext.noteLabelColor, fontSize: noteRadius * 1.5);
+    final textStyle = TextStyle(
+      color: tabContext.noteLabelColor,
+      fontSize: noteRadius * 1.5,
+    );
     final textSpan = TextSpan(text: note.fret.toString(), style: textStyle);
     final textPainter = TextPainter(
       text: textSpan,
@@ -226,9 +259,9 @@ class MeasureNotePainter extends CustomPainter {
     );
     textPainter.layout();
     textPainter.paint(
-        canvas,
-        offset -
-            Offset(textPainter.size.width / 2, textPainter.size.height / 2));
+      canvas,
+      offset - Offset(textPainter.size.width / 2, textPainter.size.height / 2),
+    );
 
     if (note.melody) {
       canvas.drawCircle(offset, noteRadius, tabContext.techniquePaint);
@@ -236,7 +269,11 @@ class MeasureNotePainter extends CustomPainter {
   }
 
   void paintHammerLine(
-      Canvas canvas, Size size, Offset noteOffset, Offset releaseOffset) {
+    Canvas canvas,
+    Size size,
+    Offset noteOffset,
+    Offset releaseOffset,
+  ) {
     final y = releaseOffset.dy - (chartPositioning.stringSpacing * .3);
     final xTo = releaseOffset.dx - 8;
     final xFrom = noteOffset.dx + 8;
@@ -249,7 +286,11 @@ class MeasureNotePainter extends CustomPainter {
   }
 
   void paintPullLine(
-      Canvas canvas, Size size, Offset noteOffset, Offset releaseOffset) {
+    Canvas canvas,
+    Size size,
+    Offset noteOffset,
+    Offset releaseOffset,
+  ) {
     final y = releaseOffset.dy + (chartPositioning.stringSpacing * .3);
     final xTo = releaseOffset.dx - 8;
     final xFrom = noteOffset.dx + 8;
@@ -262,7 +303,11 @@ class MeasureNotePainter extends CustomPainter {
   }
 
   void paintSlideLine(
-      Canvas canvas, Size size, Offset noteOffset, Offset releaseOffset) {
+    Canvas canvas,
+    Size size,
+    Offset noteOffset,
+    Offset releaseOffset,
+  ) {
     final y = releaseOffset.dy - (chartPositioning.stringSpacing * .3);
     final path = Path()
       ..moveTo(noteOffset.dx + 8, y)

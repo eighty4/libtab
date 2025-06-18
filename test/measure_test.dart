@@ -3,17 +3,12 @@ import 'package:libtab/libtab.dart';
 
 void main() {
   test('Measure.fromNoteList calculates whole note timing', () {
-    final measure = Measure.fromNoteList([
-      Note(1, 2),
-    ]);
+    final measure = Measure.fromNoteList([Note(1, 2)]);
     expect(measure.notes[0].timing, equals(Timing.ofWholeNote(1)));
   });
 
   test('Measure.fromNoteList calculates half note timing', () {
-    final measure = Measure.fromNoteList([
-      Note(1, 2),
-      Note(1, 2),
-    ]);
+    final measure = Measure.fromNoteList([Note(1, 2), Note(1, 2)]);
     expect(measure.notes[0].timing, equals(Timing.ofHalfNote(1)));
     expect(measure.notes[1].timing, equals(Timing.ofHalfNote(2)));
   });
@@ -89,19 +84,24 @@ void main() {
     expect(measure.notes[15].timing, equals(Timing.ofSixteenthNote(16)));
   });
 
-  test('Measure.fromNoteList syncs calculated timing with concurrent notes',
-      () {
-    final measure = Measure.fromNoteList([
-      Note(1, 2, and: Note(3, 4, and: Note(5, 6))),
-      Note(1, 2),
-      Note(3, 4),
-      Note(5, 6),
-    ]);
-    expect(measure.notes[0].timing, equals(Timing.ofQuarterNote(1)));
-    expect(measure.notes[0].timing, equals(measure.notes[0].and!.timing));
-    expect(measure.notes[0].timing, equals(measure.notes[0].and!.and!.timing));
-    expect(measure.notes[1].timing, equals(Timing.ofQuarterNote(2)));
-    expect(measure.notes[2].timing, equals(Timing.ofQuarterNote(3)));
-    expect(measure.notes[3].timing, equals(Timing.ofQuarterNote(4)));
-  });
+  test(
+    'Measure.fromNoteList syncs calculated timing with concurrent notes',
+    () {
+      final measure = Measure.fromNoteList([
+        Note(1, 2, and: Note(3, 4, and: Note(5, 6))),
+        Note(1, 2),
+        Note(3, 4),
+        Note(5, 6),
+      ]);
+      expect(measure.notes[0].timing, equals(Timing.ofQuarterNote(1)));
+      expect(measure.notes[0].timing, equals(measure.notes[0].and!.timing));
+      expect(
+        measure.notes[0].timing,
+        equals(measure.notes[0].and!.and!.timing),
+      );
+      expect(measure.notes[1].timing, equals(Timing.ofQuarterNote(2)));
+      expect(measure.notes[2].timing, equals(Timing.ofQuarterNote(3)));
+      expect(measure.notes[3].timing, equals(Timing.ofQuarterNote(4)));
+    },
+  );
 }

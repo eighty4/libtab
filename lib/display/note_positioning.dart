@@ -21,7 +21,7 @@ class TechniquePosition {
   final Offset to;
 
   TechniquePosition(this.technique, this.from, this.to)
-      : assert(from.dy == to.dy, '${from.dy} != ${to.dy}');
+    : assert(from.dy == to.dy, '${from.dy} != ${to.dy}');
 }
 
 /// List of [TechniquePosition] containers of [Offset]s specifying the [Note]
@@ -31,8 +31,11 @@ typedef TechniquePositionList = List<TechniquePosition>;
 extension on NotePositionMap {
   /// Adds [NotePosition]s for a [Note], recursively calling with sixteenthNote
   /// param for [Note.and]
-  Offset addNotePosition(ChartPositioning chartPositioning, Note note,
-      {int? sixteenthNth}) {
+  Offset addNotePosition(
+    ChartPositioning chartPositioning,
+    Note note, {
+    int? sixteenthNth,
+  }) {
     assert(note.and == null || note.timing == note.and?.timing);
     assert(sixteenthNth == null || (sixteenthNth >= 1 && sixteenthNth <= 16));
     if (sixteenthNth == null) {
@@ -54,16 +57,24 @@ extension on NotePositionMap {
 /// additional note played by the [Technique]
 extension on TechniquePositionList {
   void addTechniquePosition(
-      NotePositionMap notePositions,
-      ChartPositioning chartPositioning,
-      Note note,
-      Offset offset,
-      Technique technique,
-      int fret) {
-    final techniqueOffset = notePositions.addNotePosition(chartPositioning,
-        Note(note.string, fret, timing: note.sustainReleaseTiming()));
-    add(TechniquePosition(technique, offset,
-        offset.translate(techniqueOffset.dx - offset.dx, 0)));
+    NotePositionMap notePositions,
+    ChartPositioning chartPositioning,
+    Note note,
+    Offset offset,
+    Technique technique,
+    int fret,
+  ) {
+    final techniqueOffset = notePositions.addNotePosition(
+      chartPositioning,
+      Note(note.string, fret, timing: note.sustainReleaseTiming()),
+    );
+    add(
+      TechniquePosition(
+        technique,
+        offset,
+        offset.translate(techniqueOffset.dx - offset.dx, 0),
+      ),
+    );
   }
 }
 
@@ -76,23 +87,43 @@ class NotePositioning {
 
   /// Calculates [NotePositionMap] and [TechniquePositionList]
   factory NotePositioning.calculate(
-      List<Note> notes, ChartPositioning chartPositioning) {
+    List<Note> notes,
+    ChartPositioning chartPositioning,
+  ) {
     final NotePositionMap notePositions = {};
     final TechniquePositionList techniquePositions = [];
 
     for (var note in notes) {
       final offset = notePositions.addNotePosition(chartPositioning, note);
       if (note.hammerOn != null) {
-        techniquePositions.addTechniquePosition(notePositions, chartPositioning,
-            note, offset, Technique.hammerOn, note.hammerOn!);
+        techniquePositions.addTechniquePosition(
+          notePositions,
+          chartPositioning,
+          note,
+          offset,
+          Technique.hammerOn,
+          note.hammerOn!,
+        );
       }
       if (note.pullOff != null) {
-        techniquePositions.addTechniquePosition(notePositions, chartPositioning,
-            note, offset, Technique.pullOff, note.pullOff!);
+        techniquePositions.addTechniquePosition(
+          notePositions,
+          chartPositioning,
+          note,
+          offset,
+          Technique.pullOff,
+          note.pullOff!,
+        );
       }
       if (note.slideTo != null) {
-        techniquePositions.addTechniquePosition(notePositions, chartPositioning,
-            note, offset, Technique.slide, note.slideTo!);
+        techniquePositions.addTechniquePosition(
+          notePositions,
+          chartPositioning,
+          note,
+          offset,
+          Technique.slide,
+          note.slideTo!,
+        );
       }
     }
 

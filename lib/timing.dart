@@ -3,12 +3,12 @@ enum NoteType { whole, half, quarter, eighth, sixteenth }
 extension NotesPerMeasureFn on NoteType {
   /// How many notes this note type occurs in a measure
   int notesPerMeasure() => switch (this) {
-        NoteType.whole => 1,
-        NoteType.half => 2,
-        NoteType.quarter => 4,
-        NoteType.eighth => 8,
-        NoteType.sixteenth => 16
-      };
+    NoteType.whole => 1,
+    NoteType.half => 2,
+    NoteType.quarter => 4,
+    NoteType.eighth => 8,
+    NoteType.sixteenth => 16,
+  };
 }
 
 class Timing {
@@ -39,8 +39,10 @@ class Timing {
 
   /// Create a [Timing] for a [Note] using [Timing.unspecified] based on the
   /// index of the [Note] in a [List]
-  factory Timing.withinNoteList(
-      {required int listLength, required int noteIndex}) {
+  factory Timing.withinNoteList({
+    required int listLength,
+    required int noteIndex,
+  }) {
     assert(noteIndex > -1 && noteIndex < listLength);
     return Timing(notesPerMeasureToNoteType(listLength), noteIndex + 1);
   }
@@ -54,7 +56,7 @@ class Timing {
       4 => NoteType.quarter,
       2 => NoteType.half,
       1 => NoteType.whole,
-      _ => noteCount < 8 ? NoteType.eighth : NoteType.sixteenth
+      _ => noteCount < 8 ? NoteType.eighth : NoteType.sixteenth,
     };
   }
 

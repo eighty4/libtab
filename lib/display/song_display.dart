@@ -29,8 +29,12 @@ class SongDisplay extends StatelessWidget {
   List<Widget> buildRows() {
     if (song.measures.length == 1) {
       return [
-        MeasureDisplay(song.measures[0],
-            tabContext: tabContext, instrument: Instrument.guitar, last: false)
+        MeasureDisplay(
+          song.measures[0],
+          tabContext: tabContext,
+          instrument: Instrument.guitar,
+          last: false,
+        ),
       ];
     }
 
@@ -40,8 +44,13 @@ class SongDisplay extends StatelessWidget {
       if (i + 1 >= song.measures.length) {
         rows.add(buildRow(song.measures[i], null));
       } else {
-        rows.add(buildRow(song.measures[i], song.measures[i + 1],
-            last: i + 2 == song.measures.length));
+        rows.add(
+          buildRow(
+            song.measures[i],
+            song.measures[i + 1],
+            last: i + 2 == song.measures.length,
+          ),
+        );
       }
       rows.add(const SizedBox(height: padding));
     }
@@ -50,22 +59,32 @@ class SongDisplay extends StatelessWidget {
 
   Widget buildRow(Measure measure, Measure? measure2, {last = false}) {
     return Expanded(
-        child: Row(textDirection: TextDirection.ltr, children: [
-      const SizedBox(width: padding),
-      Expanded(
-          child: MeasureDisplay(measure,
+      child: Row(
+        textDirection: TextDirection.ltr,
+        children: [
+          const SizedBox(width: padding),
+          Expanded(
+            child: MeasureDisplay(
+              measure,
               tabContext: tabContext,
               instrument: Instrument.guitar,
-              last: measure2 == null)),
-      const SizedBox(width: padding),
-      Expanded(
-          child: measure2 == null
-              ? const SizedBox()
-              : MeasureDisplay(measure2,
-                  tabContext: tabContext,
-                  instrument: Instrument.guitar,
-                  last: last)),
-      const SizedBox(width: padding),
-    ]));
+              last: measure2 == null,
+            ),
+          ),
+          const SizedBox(width: padding),
+          Expanded(
+            child: measure2 == null
+                ? const SizedBox()
+                : MeasureDisplay(
+                    measure2,
+                    tabContext: tabContext,
+                    instrument: Instrument.guitar,
+                    last: last,
+                  ),
+          ),
+          const SizedBox(width: padding),
+        ],
+      ),
+    );
   }
 }

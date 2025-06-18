@@ -37,16 +37,19 @@ class Note {
   /// Additional notes played in tandem
   final Note? and;
 
-  Note(this.string, this.fret,
-      {this.melody = false,
-      this.timing = Timing.unspecified,
-      this.length,
-      this.chord,
-      this.hammerOn,
-      this.pullOff,
-      this.slideTo,
-      this.pick,
-      this.and}) {
+  Note(
+    this.string,
+    this.fret, {
+    this.melody = false,
+    this.timing = Timing.unspecified,
+    this.length,
+    this.chord,
+    this.hammerOn,
+    this.pullOff,
+    this.slideTo,
+    this.pick,
+    this.and,
+  }) {
     assert(hammerOn == null || fret < hammerOn!);
     assert(pullOff == null || fret > pullOff!);
     assert(slideTo == null || fret < slideTo!);

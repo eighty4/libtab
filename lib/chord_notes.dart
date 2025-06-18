@@ -34,25 +34,26 @@ class ChordNoteSet {
         return ChordNoteSet._unavailable(chord: chord, instrument: instrument);
       } else {
         return ChordNoteSet._(
-            chord: chord,
-            fretOffset: null,
-            instrument: instrument,
-            notes: notes);
+          chord: chord,
+          fretOffset: null,
+          instrument: instrument,
+          notes: notes,
+        );
       }
     }
   }
 
-  ChordNoteSet._(
-      {required this.chord,
-      this.fretOffset,
-      required this.instrument,
-      this.notes})
-      : noData = false;
+  ChordNoteSet._({
+    required this.chord,
+    this.fretOffset,
+    required this.instrument,
+    this.notes,
+  }) : noData = false;
 
   ChordNoteSet._unavailable({required this.chord, required this.instrument})
-      : fretOffset = null,
-        noData = true,
-        notes = null;
+    : fretOffset = null,
+      noData = true,
+      notes = null;
 }
 
 /// Mapping a chord to the optional fret offset of the chord position and
@@ -60,12 +61,36 @@ class ChordNoteSet {
 typedef _ChordNoteMapping = Map<Chord, Note?>;
 
 final _ChordNoteMapping _banjoChordNotes = Map.unmodifiable({
-  Chord.a: Note(1, 2, and: Note(2, 2, and: Note(3, 2, and: Note(4, 2)))),
-  Chord.am: Note(1, 2, and: Note(2, 1, and: Note(3, 2, and: Note(4, 2)))),
-  Chord.a7: Note(1, 1, and: Note(2, 1, and: Note(3, 2, and: Note(4, 3)))),
-  Chord.amaj7: Note(1, 2, and: Note(2, 1, and: Note(3, 2, and: Note(4, 3)))),
-  Chord.am7: Note(1, 1, and: Note(2, 1, and: Note(3, 1, and: Note(4, 3)))),
-  Chord.b: Note(1, 4, and: Note(2, 4, and: Note(3, 4, and: Note(4, 4)))),
+  Chord.a: Note(
+    1,
+    2,
+    and: Note(2, 2, and: Note(3, 2, and: Note(4, 2))),
+  ),
+  Chord.am: Note(
+    1,
+    2,
+    and: Note(2, 1, and: Note(3, 2, and: Note(4, 2))),
+  ),
+  Chord.a7: Note(
+    1,
+    1,
+    and: Note(2, 1, and: Note(3, 2, and: Note(4, 3))),
+  ),
+  Chord.amaj7: Note(
+    1,
+    2,
+    and: Note(2, 1, and: Note(3, 2, and: Note(4, 3))),
+  ),
+  Chord.am7: Note(
+    1,
+    1,
+    and: Note(2, 1, and: Note(3, 1, and: Note(4, 3))),
+  ),
+  Chord.b: Note(
+    1,
+    4,
+    and: Note(2, 4, and: Note(3, 4, and: Note(4, 4))),
+  ),
   // Chord.bm: Note(1, 2, and: Note(2, 1, and: Note(3, 2, and: Note(4, 2)))),
   Chord.b7: Note(1, 1, and: Note(3, 2, and: Note(4, 1))),
   // Chord.bmaj7: Note(1, 2, and: Note(2, 1, and: Note(3, 2, and: Note(4, 3)))),
@@ -85,12 +110,32 @@ final _ChordNoteMapping _banjoChordNotes = Map.unmodifiable({
   Chord.e7: Note(3, 1, and: Note(4, 2)),
   Chord.emaj7: Note(1, 1, and: Note(3, 1, and: Note(4, 2))),
   Chord.em7: Note(4, 2),
-  Chord.f: Note(1, 3, and: Note(2, 1, and: Note(3, 2, and: Note(4, 3)))),
-  Chord.fm: Note(1, 3, and: Note(2, 1, and: Note(3, 1, and: Note(4, 3)))),
-  Chord.f7: Note(1, 3, and: Note(2, 1, and: Note(3, 2, and: Note(4, 1)))),
+  Chord.f: Note(
+    1,
+    3,
+    and: Note(2, 1, and: Note(3, 2, and: Note(4, 3))),
+  ),
+  Chord.fm: Note(
+    1,
+    3,
+    and: Note(2, 1, and: Note(3, 1, and: Note(4, 3))),
+  ),
+  Chord.f7: Note(
+    1,
+    3,
+    and: Note(2, 1, and: Note(3, 2, and: Note(4, 1))),
+  ),
   // Chord.f7: Note(1, 1, and: Note(2, 1, and: Note(3, 2, and: Note(4, 3)))),
-  Chord.fmaj7: Note(1, 2, and: Note(2, 1, and: Note(3, 2, and: Note(4, 3)))),
-  Chord.fm7: Note(1, 1, and: Note(2, 1, and: Note(3, 1, and: Note(4, 3)))),
+  Chord.fmaj7: Note(
+    1,
+    2,
+    and: Note(2, 1, and: Note(3, 2, and: Note(4, 3))),
+  ),
+  Chord.fm7: Note(
+    1,
+    1,
+    and: Note(2, 1, and: Note(3, 1, and: Note(4, 3))),
+  ),
   Chord.g: null,
   // Chord.gm: Note(1, 3, and: Note(2, 1, and: Note(3, 1, and: Note(4, 3)))),
   Chord.g7: Note(1, 3),
@@ -104,22 +149,72 @@ final _ChordNoteMapping _guitarChordNotes = Map.unmodifiable({
   Chord.a7: Note(2, 2, and: Note(4, 2)),
   Chord.amaj7: Note(2, 2, and: Note(3, 1, and: Note(4, 2))),
   Chord.am7: Note(2, 1, and: Note(4, 2)),
-  Chord.b: Note(1, 2,
-      and: Note(2, 4, and: Note(3, 4, and: Note(4, 4, and: Note(5, 2))))),
-  Chord.bm: Note(1, 2,
-      and: Note(2, 3, and: Note(3, 4, and: Note(4, 4, and: Note(5, 2))))),
-  Chord.b7: Note(1, 2, and: Note(3, 2, and: Note(4, 1, and: Note(5, 2)))),
-  Chord.bmaj7: Note(1, 1,
-      and: Note(2, 3, and: Note(3, 2, and: Note(4, 3, and: Note(5, 1))))),
-  Chord.bm7: Note(1, 1,
-      and: Note(2, 2, and: Note(3, 1, and: Note(4, 3, and: Note(5, 1))))),
+  Chord.b: Note(
+    1,
+    2,
+    and: Note(
+      2,
+      4,
+      and: Note(3, 4, and: Note(4, 4, and: Note(5, 2))),
+    ),
+  ),
+  Chord.bm: Note(
+    1,
+    2,
+    and: Note(
+      2,
+      3,
+      and: Note(3, 4, and: Note(4, 4, and: Note(5, 2))),
+    ),
+  ),
+  Chord.b7: Note(
+    1,
+    2,
+    and: Note(3, 2, and: Note(4, 1, and: Note(5, 2))),
+  ),
+  Chord.bmaj7: Note(
+    1,
+    1,
+    and: Note(
+      2,
+      3,
+      and: Note(3, 2, and: Note(4, 3, and: Note(5, 1))),
+    ),
+  ),
+  Chord.bm7: Note(
+    1,
+    1,
+    and: Note(
+      2,
+      2,
+      and: Note(3, 1, and: Note(4, 3, and: Note(5, 1))),
+    ),
+  ),
   Chord.c: Note(2, 1, and: Note(4, 2, and: Note(5, 3))),
-  Chord.cm: Note(1, 1,
-      and: Note(2, 2, and: Note(3, 3, and: Note(4, 3, and: Note(5, 1))))),
-  Chord.c7: Note(2, 1, and: Note(3, 3, and: Note(4, 2, and: Note(5, 3)))),
+  Chord.cm: Note(
+    1,
+    1,
+    and: Note(
+      2,
+      2,
+      and: Note(3, 3, and: Note(4, 3, and: Note(5, 1))),
+    ),
+  ),
+  Chord.c7: Note(
+    2,
+    1,
+    and: Note(3, 3, and: Note(4, 2, and: Note(5, 3))),
+  ),
   Chord.cmaj7: Note(4, 2, and: Note(5, 3)),
-  Chord.cm7: Note(1, 1,
-      and: Note(2, 2, and: Note(3, 1, and: Note(4, 3, and: Note(5, 1))))),
+  Chord.cm7: Note(
+    1,
+    1,
+    and: Note(
+      2,
+      2,
+      and: Note(3, 1, and: Note(4, 3, and: Note(5, 1))),
+    ),
+  ),
   Chord.d: Note(1, 2, and: Note(2, 3, and: Note(3, 2))),
   Chord.dm: Note(1, 1, and: Note(2, 3, and: Note(3, 2))),
   Chord.d7: Note(1, 2, and: Note(2, 1, and: Note(3, 2))),
@@ -130,24 +225,82 @@ final _ChordNoteMapping _guitarChordNotes = Map.unmodifiable({
   Chord.e7: Note(3, 1, and: Note(5, 2)),
   Chord.emaj7: Note(3, 1, and: Note(4, 1, and: Note(5, 2))),
   Chord.em7: Note(5, 2),
-  Chord.f: Note(1, 1, and: Note(2, 1, and: Note(3, 2, and: Note(4, 3)))),
-  Chord.fm: Note(1, 1,
-      and: Note(2, 1,
-          and: Note(3, 1, and: Note(4, 3, and: Note(5, 3, and: Note(6, 1)))))),
-  Chord.f7: Note(1, 1,
-      and: Note(2, 1,
-          and: Note(3, 2, and: Note(4, 1, and: Note(5, 3, and: Note(6, 1)))))),
+  Chord.f: Note(
+    1,
+    1,
+    and: Note(2, 1, and: Note(3, 2, and: Note(4, 3))),
+  ),
+  Chord.fm: Note(
+    1,
+    1,
+    and: Note(
+      2,
+      1,
+      and: Note(
+        3,
+        1,
+        and: Note(4, 3, and: Note(5, 3, and: Note(6, 1))),
+      ),
+    ),
+  ),
+  Chord.f7: Note(
+    1,
+    1,
+    and: Note(
+      2,
+      1,
+      and: Note(
+        3,
+        2,
+        and: Note(4, 1, and: Note(5, 3, and: Note(6, 1))),
+      ),
+    ),
+  ),
   Chord.fmaj7: Note(2, 1, and: Note(3, 2, and: Note(4, 3))),
-  Chord.fm7: Note(1, 1,
-      and: Note(2, 1,
-          and: Note(3, 1, and: Note(4, 1, and: Note(5, 3, and: Note(6, 1)))))),
+  Chord.fm7: Note(
+    1,
+    1,
+    and: Note(
+      2,
+      1,
+      and: Note(
+        3,
+        1,
+        and: Note(4, 1, and: Note(5, 3, and: Note(6, 1))),
+      ),
+    ),
+  ),
   Chord.g: Note(1, 3, and: Note(5, 2, and: Note(6, 3))),
-  Chord.gm: Note(1, 1,
-      and: Note(2, 1,
-          and: Note(3, 1, and: Note(4, 3, and: Note(5, 3, and: Note(6, 1)))))),
+  Chord.gm: Note(
+    1,
+    1,
+    and: Note(
+      2,
+      1,
+      and: Note(
+        3,
+        1,
+        and: Note(4, 3, and: Note(5, 3, and: Note(6, 1))),
+      ),
+    ),
+  ),
   Chord.g7: Note(1, 1, and: Note(5, 2, and: Note(6, 3))),
-  Chord.gmaj7: Note(1, 2, and: Note(2, 3, and: Note(3, 4, and: Note(4, 5)))),
-  Chord.gm7: Note(1, 1,
-      and: Note(2, 1,
-          and: Note(3, 1, and: Note(4, 1, and: Note(5, 3, and: Note(6, 1)))))),
+  Chord.gmaj7: Note(
+    1,
+    2,
+    and: Note(2, 3, and: Note(3, 4, and: Note(4, 5))),
+  ),
+  Chord.gm7: Note(
+    1,
+    1,
+    and: Note(
+      2,
+      1,
+      and: Note(
+        3,
+        1,
+        and: Note(4, 1, and: Note(5, 3, and: Note(6, 1))),
+      ),
+    ),
+  ),
 });

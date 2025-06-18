@@ -2,8 +2,13 @@ import 'package:flutter/widgets.dart';
 import 'package:libtab/libtab.dart';
 
 class GridPainter extends CustomPainter {
-  static void paintGrid(TabContext tabContext, Canvas canvas, Size size,
-      {required int verticalLines, required int horizontalLines}) {
+  static void paintGrid(
+    TabContext tabContext,
+    Canvas canvas,
+    Size size, {
+    required int verticalLines,
+    required int horizontalLines,
+  }) {
     final path = Path()
       ..addRect(Rect.fromPoints(Offset.zero, Offset(size.width, size.height)));
     if (horizontalLines > 0) {
@@ -29,17 +34,23 @@ class GridPainter extends CustomPainter {
   final int verticalLines;
   final int horizontalLines;
 
-  GridPainter(
-      {required this.tabContext,
-      this.verticalLines = 0,
-      this.horizontalLines = 0}) {
+  GridPainter({
+    required this.tabContext,
+    this.verticalLines = 0,
+    this.horizontalLines = 0,
+  }) {
     assert(verticalLines >= 0 || horizontalLines >= 0);
   }
 
   @override
   void paint(Canvas canvas, Size size) {
-    paintGrid(tabContext, canvas, size,
-        verticalLines: verticalLines, horizontalLines: horizontalLines);
+    paintGrid(
+      tabContext,
+      canvas,
+      size,
+      verticalLines: verticalLines,
+      horizontalLines: horizontalLines,
+    );
   }
 
   @override

@@ -13,10 +13,11 @@ class ChartPositioning {
   /// Horizontal padding on the edges of a measure before first note
   final double xOffset;
 
-  ChartPositioning(
-      {required this.sixteenthSpacing,
-      required this.stringSpacing,
-      required this.xOffset});
+  ChartPositioning({
+    required this.sixteenthSpacing,
+    required this.stringSpacing,
+    required this.xOffset,
+  });
 
   /// Builds a ChartPositioning for the given size and instrument
   factory ChartPositioning.calculate(Size size, Instrument instrument) {

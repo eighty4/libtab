@@ -14,31 +14,31 @@ class TabContext {
   final Paint noteShapePaint;
   final Paint techniquePaint;
 
-  TabContext(
-      {this.backgroundColor = _transparent,
-      required Color chartColor,
-      required this.labelTextColor,
-      required Color noteLabelColor,
-      required Color noteShapeColor,
-      required Color techniqueColor})
-      : chartFillPaint = Paint()
-          ..color = chartColor
-          ..style = PaintingStyle.fill,
-        chartStrokePaint = Paint()
-          ..color = chartColor
-          ..strokeWidth = 1
-          ..style = PaintingStyle.stroke,
-        noteLabelPaint = Paint()
-          ..color = noteLabelColor
-          ..strokeWidth = 2
-          ..style = PaintingStyle.stroke,
-        noteShapePaint = Paint()
-          ..color = noteShapeColor
-          ..style = PaintingStyle.fill,
-        techniquePaint = Paint()
-          ..color = techniqueColor
-          ..strokeWidth = 2
-          ..style = PaintingStyle.stroke;
+  TabContext({
+    this.backgroundColor = _transparent,
+    required Color chartColor,
+    required this.labelTextColor,
+    required Color noteLabelColor,
+    required Color noteShapeColor,
+    required Color techniqueColor,
+  }) : chartFillPaint = Paint()
+         ..color = chartColor
+         ..style = PaintingStyle.fill,
+       chartStrokePaint = Paint()
+         ..color = chartColor
+         ..strokeWidth = 1
+         ..style = PaintingStyle.stroke,
+       noteLabelPaint = Paint()
+         ..color = noteLabelColor
+         ..strokeWidth = 2
+         ..style = PaintingStyle.stroke,
+       noteShapePaint = Paint()
+         ..color = noteShapeColor
+         ..style = PaintingStyle.fill,
+       techniquePaint = Paint()
+         ..color = techniqueColor
+         ..strokeWidth = 2
+         ..style = PaintingStyle.stroke;
 
   factory TabContext.forBrightness(Brightness brightness) {
     const backgroundColor = _transparent;
@@ -48,12 +48,13 @@ class TabContext {
     final noteShapeColor = brightness == Brightness.dark ? _white : _black;
     const techniqueColor = _grey;
     return TabContext(
-        backgroundColor: backgroundColor,
-        chartColor: chartColor,
-        labelTextColor: labelColor,
-        noteLabelColor: noteLabelColor,
-        noteShapeColor: noteShapeColor,
-        techniqueColor: techniqueColor);
+      backgroundColor: backgroundColor,
+      chartColor: chartColor,
+      labelTextColor: labelColor,
+      noteLabelColor: noteLabelColor,
+      noteShapeColor: noteShapeColor,
+      techniqueColor: techniqueColor,
+    );
   }
 
   Color get chartColor => chartFillPaint.color;
