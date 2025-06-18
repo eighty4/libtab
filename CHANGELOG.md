@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+* Upgrade to Flutter 3.32
 * Fix bug determining default timing for a pull-off, hammer-on or slide
 
 ## [v0.0.12] - 2025-01-03
