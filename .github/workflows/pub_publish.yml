@@ -1,5 +1,5 @@
 name: Publish to pub.dev
-run-name: "Release: publish `${{ github.ref_name }}` to pub.dev"
+run-name: "Publish: `${{ github.ref_name }}` to pub.dev"
 
 on:
   workflow_dispatch:
@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: validate tag
         run: |
-          [[ ! "${{ github.ref }}" =~ ^refs\/tags\/v\d{1,3}\.\d{1,3}\.\d{1,3}$ ]] && exit 1
+          [[ "${{ github.ref }}" =~ ^refs\/tags\/v[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]] || exit 1
       - uses: actions/checkout@v4
       - uses: flutter-actions/setup-flutter@v4
         with:
@@ -33,6 +33,8 @@ jobs:
   gh-release:
     needs: release-notes
     uses: ./.github/workflows/gh_release.yml
+    permissions:
+      contents: write
     with:
       notes: ${{ needs.release-notes.outputs.notes }}
       tag: ${{ github.ref_name }}

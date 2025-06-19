@@ -28,26 +28,40 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - run: ./.github/workflows/changelog_check.sh CHANGELOG.md
       - uses: dart-lang/setup-dart@v1
       - uses: actions/setup-node@v4
         with:
           node-version: 23
       - run: npm i -g @eighty4/changelog
+      - run: changelog check
       - name: bump semver ${{ inputs.semver_bump }}
         id: bump
         run: |
-          changelog check
           dart pub bump ${{ inputs.semver_bump }}
           TAG="v$(grep "version: " pubspec.yaml | cut -d ' ' -f2)"
-          git add CHANGELOG.md pubspec.yaml
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+      - name: changelog rollover
+        run: |
+          changelog rollover ${{ steps.bump.outputs.tag }}
+          mv CHANGELOG.md CHANGELOG.md.next
+          grep -vE "\[Unreleased\]|\?\?\?|^$\S" CHANGELOG.md.next > CHANGELOG.md
+      - name: git config
+        run: |
           git config --global user.name "Adam McKee"
           git config --global user.email "adam.be.g84d@gmail.com"
-          git commit -m "publishing $TAG to pub.dev"
-          git tag "$TAG"
-          git push --atomic origin main "$TAG"
-          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+      - name: git tag release
+        run: |
+          git add CHANGELOG.md pubspec.yaml
+          git commit -m "publishing ${{ steps.bump.outputs.tag }} to pub.dev"
+          git tag "${{ steps.bump.outputs.tag }}"
+      - name: git commit dev next
+        run: |
+          mv CHANGELOG.md.next CHANGELOG.md
+          git add CHANGELOG.md
+          git commit -m "preparing dev next"
+      - name: git push
+        run: git push --atomic origin main "${{ steps.bump.outputs.tag }}"
       - name: gh workflow run release_publish.yml
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh workflow run release_publish.yml --ref ${{ steps.bump.outputs.tag }}
+        run: gh workflow run pub_publish.yml --ref ${{ steps.bump.outputs.tag }}
