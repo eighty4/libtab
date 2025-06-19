@@ -37,7 +37,7 @@ jobs:
 
           echo "## Release notes" >> release_notes.md
           echo >> release_notes.md
-          changelog get "$CHANGELOG_TAG" >> release_notes.md
+          changelog get "$GIT_TAG" >> release_notes.md
           echo >> release_notes.md
 
           RELEASE_NOTES=$(cat release_notes.md | base64 -w 0)
