@@ -1,6 +1,8 @@
 # Changelog
 
-## [Unreleased]
+
+
+## [v0.0.13] - 2025-06-19
 
 * Upgrade to Flutter 3.32 and dropping support for dart <3.8
 * Fix bug determining default timing for a pull-off, hammer-on or slide
@@ -68,7 +70,7 @@
 
 * Model types and widgets for modeling musical chords and measures
 
-[Unreleased]: https://github.com/eighty4/libtab/compare/v0.0.12...HEAD
+[v0.0.13]: https://github.com/eighty4/libtab/compare/v0.0.12...v0.0.13
 [v0.0.12]: https://github.com/eighty4/libtab/compare/v0.0.11...v0.0.12
 [v0.0.11]: https://github.com/eighty4/libtab/compare/v0.0.10...v0.0.11
 [v0.0.10]: https://github.com/eighty4/libtab/compare/v0.0.9...v0.0.10

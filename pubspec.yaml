@@ -1,6 +1,6 @@
 name: libtab
 description: Flutter widgets for modelling tab notation, rendering charts of chord finger positions and tabs
-version: 0.0.12
+version: 0.0.13
 homepage: https://github.com/eighty4/libtab
 repository: https://github.com/eighty4/libtab
 
