@@ -64,7 +64,7 @@
 
 * Added banjo and guitar major chords
 
-## [v0.0.1] 2023-03-03
+## [v0.0.1] - 2023-03-03
 
 * Model types and widgets for modeling musical chords and measures
 
