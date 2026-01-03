@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:libtab/display/note_positioning.dart';
 import 'package:libtab/libtab.dart';
 
-expectNotePositioning(
+void expectNotePositioning(
   NotePositioning notePositioning, {
   required int sixteenthNth,
   double? x,

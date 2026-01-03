@@ -1,4 +1,4 @@
-library libtab;
+library;
 
 export 'chord.dart';
 export 'chord_notes.dart';
