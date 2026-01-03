@@ -28,9 +28,55 @@ class MeasureDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final chartPositioning = ChartPositioning.calculate(size, instrument);
+    final notePositioning = NotePositioning.calculate(
+      measure.notes,
+      chartPositioning,
+    );
+    return _MeasureDisplay(
+      measure: measure,
+      chartPositioning: chartPositioning,
+      notePositioning: notePositioning,
+      tabContext: tabContext,
+      instrument: instrument,
+      size: size,
+      label: label,
+      last: last,
+    );
+  }
+}
+
+class _MeasureDisplay extends StatelessWidget {
+  final TabContext tabContext;
+  final Size size;
+  final Instrument instrument;
+  final bool last;
+  final Measure measure;
+  final String? label;
+  final ChartPositioning chartPositioning;
+  final NotePositioning notePositioning;
+
+  const _MeasureDisplay({
+    required this.measure,
+    required this.chartPositioning,
+    required this.notePositioning,
+    required this.tabContext,
+    required this.instrument,
+    required this.size,
+    required this.last,
+    required this.label,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     if (label == null) {
       return buildMeasure();
+    } else {
+      return buildLabeledMeasure();
     }
+  }
+
+  Widget buildLabeledMeasure() {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -48,37 +94,30 @@ class MeasureDisplay extends StatelessWidget {
     );
   }
 
-  Container buildMeasure() {
-    final chartPositioning = ChartPositioning.calculate(size, instrument);
-    return Container(
-      color: tabContext.backgroundColor,
-      child: Stack(
-        children: [
+  Widget buildMeasure() {
+    return Stack(
+      children: [
+        CustomPaint(
+          size: size,
+          painter: MeasureChartPainter(
+            tabContext: tabContext,
+            instrument: instrument,
+            measure: measure,
+            last: last,
+            chartPositioning: chartPositioning,
+          ),
+        ),
+        if (measure.notes.isNotEmpty)
           CustomPaint(
             size: size,
-            painter: MeasureChartPainter(
+            painter: MeasureNotePainter(
               tabContext: tabContext,
-              instrument: instrument,
               measure: measure,
-              last: last,
               chartPositioning: chartPositioning,
+              notePositioning: notePositioning,
             ),
           ),
-          if (measure.notes.isNotEmpty)
-            CustomPaint(
-              size: size,
-              painter: MeasureNotePainter(
-                tabContext: tabContext,
-                measure: measure,
-                chartPositioning: chartPositioning,
-                notePositioning: NotePositioning.calculate(
-                  measure.notes,
-                  chartPositioning,
-                ),
-              ),
-            ),
-        ],
-      ),
+      ],
     );
   }
 }
@@ -172,11 +211,13 @@ class MeasureChartPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(MeasureChartPainter oldDelegate) =>
-      !identical(chartPositioning, oldDelegate.chartPositioning) ||
-      !identical(instrument, oldDelegate.instrument) ||
-      !identical(last, oldDelegate.last) ||
       !identical(measure, oldDelegate.measure) ||
-      !identical(tabContext, oldDelegate.tabContext);
+      chartPositioning != oldDelegate.chartPositioning ||
+      instrument != oldDelegate.instrument ||
+      last != oldDelegate.last ||
+      tabContext.backgroundColor != oldDelegate.tabContext.backgroundColor ||
+      tabContext.chartFillPaint != oldDelegate.tabContext.chartFillPaint ||
+      tabContext.chartStrokePaint != oldDelegate.tabContext.chartStrokePaint;
 }
 
 extension RepeatCircleCenterFns on Instrument {
@@ -189,9 +230,20 @@ extension RepeatCircleCenterFns on Instrument {
 }
 
 class MeasureNotePainter extends CustomPainter {
+  static const double _minNoteRadius = 3;
+  static const double _maxNoteRadius = 20;
+  static const double _minShadowElevation = 1;
+  static const double _maxShadowElevation = 5;
+
+  static double calcNoteRadius(Size measureSize) {
+    return (min(measureSize.width / 2, measureSize.height) * .09).clamp(
+      _minNoteRadius,
+      _maxNoteRadius,
+    );
+  }
+
   final TabContext tabContext;
   final Measure measure;
-  final Paint noteLabelPaint;
   final ChartPositioning chartPositioning;
   final NotePositioning notePositioning;
 
@@ -200,7 +252,7 @@ class MeasureNotePainter extends CustomPainter {
     required this.measure,
     required this.chartPositioning,
     required this.notePositioning,
-  }) : noteLabelPaint = tabContext.noteLabelPaint;
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -226,24 +278,17 @@ class MeasureNotePainter extends CustomPainter {
   }
 
   void paintNote(Canvas canvas, Size size, Note note, Offset offset) {
-    const double minNoteRadius = 3;
-    const double maxNoteRadius = 20;
-    const double noteRadiusRangeDiff = maxNoteRadius - minNoteRadius;
-    const double minShadowElevation = 1;
-    const double maxShadowElevation = 5;
-    final double noteRadius = (min(size.width / 2, size.height) * .09).clamp(
-      minNoteRadius,
-      maxNoteRadius,
-    );
+    const double noteRadiusRangeDiff = _maxNoteRadius - _minNoteRadius;
+    final double noteRadius = calcNoteRadius(size);
     final shadowElevation =
-        ((noteRadius - minNoteRadius) / noteRadiusRangeDiff) *
-        maxShadowElevation;
+        ((noteRadius - _minNoteRadius) / noteRadiusRangeDiff) *
+        _maxShadowElevation;
     final path = Path()
       ..addOval(Rect.fromCircle(center: offset, radius: noteRadius));
     canvas.drawShadow(
       path,
       tabContext.noteLabelColor,
-      max(minShadowElevation, shadowElevation),
+      max(_minShadowElevation, shadowElevation),
       false,
     );
     canvas.drawPath(path, tabContext.noteShapePaint);
@@ -317,9 +362,10 @@ class MeasureNotePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(MeasureNotePainter oldDelegate) =>
-      !identical(chartPositioning, oldDelegate.chartPositioning) ||
       !identical(measure, oldDelegate.measure) ||
-      !identical(noteLabelPaint, oldDelegate.noteLabelPaint) ||
       !identical(notePositioning, oldDelegate.notePositioning) ||
-      !identical(tabContext, oldDelegate.tabContext);
+      chartPositioning != oldDelegate.chartPositioning ||
+      tabContext.noteLabelColor != oldDelegate.tabContext.noteLabelColor ||
+      tabContext.noteShapePaint != oldDelegate.tabContext.noteShapePaint ||
+      tabContext.techniquePaint != oldDelegate.tabContext.techniquePaint;
 }

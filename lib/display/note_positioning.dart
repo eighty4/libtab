@@ -83,7 +83,7 @@ class NotePositioning {
   final NotePositionMap notes;
   final TechniquePositionList techniques;
 
-  NotePositioning(this.notes, this.techniques) : assert(notes.isNotEmpty);
+  NotePositioning(this.notes, this.techniques);
 
   /// Calculates [NotePositionMap] and [TechniquePositionList]
   factory NotePositioning.calculate(

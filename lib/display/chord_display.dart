@@ -121,10 +121,13 @@ class ChordChartPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(ChordChartPainter oldDelegate) =>
-      !identical(chord, oldDelegate.chord) ||
-      !identical(fretSpacing, oldDelegate.fretSpacing) ||
-      !identical(noteRadius, oldDelegate.noteRadius) ||
-      !identical(stringCount, oldDelegate.stringCount) ||
-      !identical(stringSpacing, oldDelegate.stringSpacing) ||
-      !identical(tabContext, oldDelegate.tabContext);
+      chord != oldDelegate.chord ||
+      fretSpacing != oldDelegate.fretSpacing ||
+      noteRadius != oldDelegate.noteRadius ||
+      stringCount != oldDelegate.stringCount ||
+      stringSpacing != oldDelegate.stringSpacing ||
+      tabContext.noteLabelColor != oldDelegate.tabContext.noteLabelColor ||
+      tabContext.noteShapePaint != oldDelegate.tabContext.noteShapePaint ||
+      tabContext.chartFillPaint != oldDelegate.tabContext.chartFillPaint ||
+      tabContext.chartStrokePaint != oldDelegate.tabContext.chartStrokePaint;
 }

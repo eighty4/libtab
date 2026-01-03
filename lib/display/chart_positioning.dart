@@ -37,4 +37,16 @@ class ChartPositioning {
 
   /// A Note's center's y position on a chart
   double yPosition(Note note) => (note.string - 1) * stringSpacing;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ChartPositioning &&
+          runtimeType == other.runtimeType &&
+          sixteenthSpacing == other.sixteenthSpacing &&
+          stringSpacing == other.stringSpacing &&
+          xOffset == other.xOffset;
+
+  @override
+  int get hashCode => Object.hash(sixteenthSpacing, stringSpacing, xOffset);
 }
