@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:libtab/libtab.dart';
 
+@Deprecated('removing to defer api design for any future use case')
 class Song {
   final Chord chord;
 
@@ -9,6 +10,7 @@ class Song {
   List<Measure> measures;
 }
 
+@Deprecated('removing to avoid application-level layout decisions')
 class SongDisplay extends StatelessWidget {
   static const double padding = 5;
   final TabContext tabContext;

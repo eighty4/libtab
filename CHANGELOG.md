@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 
-* ???
+* Deprecated Song and SongDisplay to simplify library and remove application layout features
 
 ## [v0.0.13] - 2025-06-19
 
