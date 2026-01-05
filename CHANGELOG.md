@@ -4,6 +4,7 @@
 
 * MeasureChartPointer has removed the fixed-position Measure argument for the default constructor
   with an addition of MeasureChartPointer.forMeasure to use the original signature
+* Deprecated MeasureDisplay in favor of MeasureChart.singleMeasure
 * Deprecated Song and SongDisplay to simplify library and remove application layout features
 
 ## [v0.0.13] - 2025-06-19

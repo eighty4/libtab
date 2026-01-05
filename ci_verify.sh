@@ -57,4 +57,4 @@ fi
 
 flutter test
 flutter analyze
-dart format lib test --set-exit-if-changed
+dart format example/lib lib test --set-exit-if-changed

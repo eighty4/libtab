@@ -5,6 +5,7 @@ export 'chord_notes.dart';
 export 'context.dart';
 export 'display/chart_positioning.dart';
 export 'display/chord_display.dart';
+export 'display/measure_chart.dart';
 export 'display/measure_display.dart';
 export 'instrument.dart';
 export 'measure.dart';

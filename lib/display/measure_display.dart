@@ -5,6 +5,7 @@ import 'measure_paint.dart';
 import 'note_positioning.dart';
 
 /// Displays a [Measure] of tab data that can be styled with [TabContext]
+@Deprecated('migrate to MeasureChart.singleMeasure')
 class MeasureDisplay extends StatelessWidget {
   static const defaultSize = Size(300, 200);
   final TabContext tabContext;

@@ -46,7 +46,7 @@ jobs:
           version: 3.32.4
           cache-sdk: true
       - name: format
-        run: dart format lib test --set-exit-if-changed
+        run: dart format example/lib lib test --set-exit-if-changed
 
   test:
     runs-on: ubuntu-22.04
