@@ -1,4 +1,5 @@
-import 'dart:ui';
+import 'package:flutter/material.dart';
+import 'package:libtab/libtab.dart';
 
 const _black = Color(0xFF000000);
 const _grey = Color(0xFF607D8B);
@@ -10,6 +11,7 @@ class TabContext {
   final Paint chartFillPaint;
   final Paint chartStrokePaint;
   final Color labelTextColor;
+  final MetronomeStyle metronomeStyle;
   final Paint noteLabelPaint;
   final Paint noteShapePaint;
   final Paint techniquePaint;
@@ -18,6 +20,7 @@ class TabContext {
     this.backgroundColor = _transparent,
     required Color chartColor,
     required this.labelTextColor,
+    required this.metronomeStyle,
     required Color noteLabelColor,
     required Color noteShapeColor,
     required Color techniqueColor,
@@ -46,11 +49,13 @@ class TabContext {
     final labelColor = brightness == Brightness.dark ? _white : _black;
     final noteLabelColor = brightness == Brightness.dark ? _black : _white;
     final noteShapeColor = brightness == Brightness.dark ? _white : _black;
+    final metronomeColor = Colors.deepOrangeAccent;
     const techniqueColor = _grey;
     return TabContext(
       backgroundColor: backgroundColor,
       chartColor: chartColor,
       labelTextColor: labelColor,
+      metronomeStyle: MetronomeStyle(shapeColor: metronomeColor),
       noteLabelColor: noteLabelColor,
       noteShapeColor: noteShapeColor,
       techniqueColor: techniqueColor,

@@ -55,7 +55,12 @@ fi
 
 # run through all the checks done for ci
 
-(cd example/single_measure_chart && dart pub get)
+rm -rf example/*/test
+for d in ./example/*/ ; do
+    if [ -d "$d" ]; then
+        (cd "$d" && flutter pub get)
+    fi
+done
 
 flutter test
 flutter analyze

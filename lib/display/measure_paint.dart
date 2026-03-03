@@ -14,15 +14,15 @@ class MeasureChartPainter extends CustomPainter {
   static const double repeatDotRadius = 3;
   final ChartPositioning chartPositioning;
   final Instrument instrument;
-  final bool repeatEndOrLastMeasure;
-  final bool repeatStart;
+  final bool showFinalBarOrRepeatEnd;
+  final bool showRepeatStart;
   final TabContext tabContext;
 
   MeasureChartPainter({
     required this.chartPositioning,
     required this.instrument,
-    this.repeatEndOrLastMeasure = false,
-    this.repeatStart = false,
+    this.showFinalBarOrRepeatEnd = false,
+    this.showRepeatStart = false,
     required this.tabContext,
   });
 
@@ -35,8 +35,8 @@ class MeasureChartPainter extends CustomPainter {
   }) : this(
          instrument: instrument,
          chartPositioning: chartPositioning,
-         repeatEndOrLastMeasure: last || measure.repeatEnd,
-         repeatStart: measure.repeatStart,
+         showFinalBarOrRepeatEnd: last || measure.repeatEnd,
+         showRepeatStart: measure.repeatStart,
          tabContext: tabContext,
        );
 
@@ -54,10 +54,10 @@ class MeasureChartPainter extends CustomPainter {
 
   void paintMeasureDecorations(Canvas canvas, Size size) {
     final path = Path();
-    if (repeatEndOrLastMeasure) {
+    if (showFinalBarOrRepeatEnd) {
       addRepeatBarsToPath(path, size);
     }
-    if (repeatStart) {
+    if (showRepeatStart) {
       addRepeatCirclesToPath(path, size);
     }
     canvas.drawPath(path, tabContext.chartFillPaint);
@@ -69,11 +69,11 @@ class MeasureChartPainter extends CustomPainter {
       const Offset(fatBar + barPad, 0),
       Offset(fatBar + thinBar + barPad, size.height),
     );
-    if (repeatStart) {
+    if (showRepeatStart) {
       path.addRect(fat);
       path.addRect(thin);
     }
-    if (repeatEndOrLastMeasure) {
+    if (showFinalBarOrRepeatEnd) {
       path.addRect(fat.translate(size.width - fat.width, 0));
       path.addRect(
         thin.translate(size.width - (thin.left * 2) - thin.width, 0),
@@ -96,11 +96,11 @@ class MeasureChartPainter extends CustomPainter {
       ),
       radius: repeatDotRadius,
     );
-    if (repeatStart) {
+    if (showRepeatStart) {
       path.addOval(top);
       path.addOval(bottom);
     }
-    if (repeatEndOrLastMeasure) {
+    if (showFinalBarOrRepeatEnd) {
       path.addOval(top.translate(size.width - (repeatDot * 2), 0));
       path.addOval(bottom.translate(size.width - (repeatDot * 2), 0));
     }
@@ -110,8 +110,8 @@ class MeasureChartPainter extends CustomPainter {
   bool shouldRepaint(MeasureChartPainter oldDelegate) =>
       chartPositioning != oldDelegate.chartPositioning ||
       instrument != oldDelegate.instrument ||
-      repeatEndOrLastMeasure != oldDelegate.repeatEndOrLastMeasure ||
-      repeatStart != oldDelegate.repeatStart ||
+      showFinalBarOrRepeatEnd != oldDelegate.showFinalBarOrRepeatEnd ||
+      showRepeatStart != oldDelegate.showRepeatStart ||
       tabContext.backgroundColor != oldDelegate.tabContext.backgroundColor ||
       tabContext.chartFillPaint != oldDelegate.tabContext.chartFillPaint ||
       tabContext.chartStrokePaint != oldDelegate.tabContext.chartStrokePaint;

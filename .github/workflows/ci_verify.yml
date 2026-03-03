@@ -15,7 +15,7 @@ on:
   workflow_call:
 
 env:
-  flutter_version: 3.32.4
+  flutter_version: 3.38.10
 
 jobs:
   verified:
@@ -45,6 +45,8 @@ jobs:
     strategy:
       matrix:
         example:
+          - measure_progress
+          - metronome_material
           - single_measure_chart
     runs-on: ubuntu-latest
     steps:
@@ -74,13 +76,19 @@ jobs:
         run: dart format example/lib lib test --set-exit-if-changed
 
   test:
+    strategy:
+      fail-fast: false
+      matrix:
+        flutter_version:
+          - 3.41.3
+          - 3.38.10
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: flutter-actions/setup-flutter@v4
         with:
           channel: stable
-          version: ${{ env.flutter_version }}
+          version: ${{ matrix.flutter_version }}
           cache-sdk: true
       - name: test
         run: flutter test

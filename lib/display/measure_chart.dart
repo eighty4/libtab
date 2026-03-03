@@ -5,13 +5,16 @@ import 'package:libtab/display/measure_paint.dart';
 import 'package:libtab/display/note_positioning.dart';
 import 'package:libtab/instrument.dart';
 import 'package:libtab/measure.dart';
+import 'package:libtab/metronome.dart';
 
 class MeasureChart extends StatelessWidget {
   static const defaultSize = Size(300, 200);
 
   final Instrument instrument;
-  final bool last;
   final Measure? measure;
+  final Metronome? metronome;
+  final bool showFinalBarOrRepeatEnd;
+  final bool showRepeatStart;
   final Size size;
   final TabContext tabContext;
 
@@ -20,8 +23,10 @@ class MeasureChart extends StatelessWidget {
     this.size = defaultSize,
     required this.tabContext,
     required this.instrument,
-    this.last = false,
-  }) : measure = null;
+    this.showFinalBarOrRepeatEnd = false,
+    this.showRepeatStart = false,
+  }) : measure = null,
+       metronome = null;
 
   const MeasureChart.singleMeasure({
     super.key,
@@ -29,40 +34,149 @@ class MeasureChart extends StatelessWidget {
     required this.tabContext,
     required this.instrument,
     required this.measure,
-    this.last = false,
-  });
+    this.showFinalBarOrRepeatEnd = false,
+    this.showRepeatStart = false,
+  }) : metronome = null;
+
+  const MeasureChart.withMetronome({
+    super.key,
+    this.size = defaultSize,
+    required this.tabContext,
+    required this.instrument,
+    this.metronome,
+    bool showFinalBarOnLastMeasure = false,
+  }) : measure = null,
+       showFinalBarOrRepeatEnd = showFinalBarOnLastMeasure,
+       showRepeatStart = false;
 
   @override
   Widget build(BuildContext context) {
-    return switch (measure) {
-      Measure measure => _StaticMeasureChart(
+    return switch ((measure, metronome)) {
+      (null, Metronome metronome) => _DynamicMeasureChart(
         instrument: instrument,
-        last: last,
+        metronome: metronome,
+        showFinalBarOnLastMeasure: showFinalBarOrRepeatEnd,
+        size: size,
+        tabContext: tabContext,
+      ),
+      (Measure measure, null) => _StaticMeasureChart(
+        instrument: instrument,
+        showFinalBar: showFinalBarOrRepeatEnd,
         measure: measure,
         size: size,
         tabContext: tabContext,
       ),
-      null => _EmptyMeasureChart(
+      (null, null) => _EmptyMeasureChart(
         instrument: instrument,
-        last: last,
+        showFinalBar: showFinalBarOrRepeatEnd,
         size: size,
         tabContext: tabContext,
       ),
+      (_, _) => throw StateError('invalid MeasureChart state'),
     };
+  }
+}
+
+class _DynamicMeasureChart extends StatefulWidget {
+  final Instrument instrument;
+  final Metronome metronome;
+  final bool showFinalBarOnLastMeasure;
+  final Size size;
+  final TabContext tabContext;
+
+  const _DynamicMeasureChart({
+    required this.instrument,
+    required this.metronome,
+    required this.showFinalBarOnLastMeasure,
+    required this.size,
+    required this.tabContext,
+  });
+
+  @override
+  State<_DynamicMeasureChart> createState() => _DynamicMeasureChartState();
+}
+
+class _DynamicMeasureChartState extends State<_DynamicMeasureChart> {
+  late bool showFinalBar;
+  late Measure measure;
+  late MetronomeListener _onMeasureChange;
+
+  @override
+  void initState() {
+    super.initState();
+    updateMaterial();
+    _onMeasureChange = widget.metronome.onMeasure(
+      (_) => setState(() => updateMaterial()),
+    );
+  }
+
+  @override
+  void dispose() {
+    _onMeasureChange.remove();
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(_DynamicMeasureChart oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!identical(widget.metronome, oldWidget.metronome)) {
+      setState(() => updateMaterial());
+    }
+  }
+
+  void updateMaterial() {
+    showFinalBar =
+        widget.showFinalBarOnLastMeasure && widget.metronome.isLastMeasure();
+    measure = widget.metronome.currentMeasure;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _CalculatedNotePositioning(
+      instrument: widget.instrument,
+      measure: measure,
+      size: widget.size,
+      builder: (context, chartPositioning, notePositioning) {
+        return Stack(
+          children: [
+            CustomPaint(
+              size: widget.size,
+              painter: MeasureChartPainter.forMeasure(
+                tabContext: widget.tabContext,
+                instrument: widget.instrument,
+                measure: measure,
+                last: showFinalBar,
+                chartPositioning: chartPositioning,
+              ),
+            ),
+            if (measure.notes.isNotEmpty)
+              CustomPaint(
+                size: widget.size,
+                painter: MeasureNotePainter(
+                  tabContext: widget.tabContext,
+                  measure: measure,
+                  chartPositioning: chartPositioning,
+                  notePositioning: notePositioning,
+                ),
+              ),
+          ],
+        );
+      },
+    );
   }
 }
 
 class _StaticMeasureChart extends StatelessWidget {
   final Instrument instrument;
-  final bool last;
   final Measure measure;
+  final bool showFinalBar;
   final Size size;
   final TabContext tabContext;
 
   const _StaticMeasureChart({
     required this.instrument,
-    required this.last,
     required this.measure,
+    required this.showFinalBar,
     required this.size,
     required this.tabContext,
   });
@@ -78,11 +192,11 @@ class _StaticMeasureChart extends StatelessWidget {
           children: [
             CustomPaint(
               size: size,
-              painter: MeasureChartPainter.forMeasure(
+              painter: MeasureChartPainter(
                 tabContext: tabContext,
                 instrument: instrument,
-                measure: measure,
-                last: last,
+                showFinalBarOrRepeatEnd: showFinalBar || measure.repeatEnd,
+                showRepeatStart: measure.repeatStart,
                 chartPositioning: chartPositioning,
               ),
             ),
@@ -105,13 +219,13 @@ class _StaticMeasureChart extends StatelessWidget {
 
 class _EmptyMeasureChart extends StatelessWidget {
   final Instrument instrument;
-  final bool last;
+  final bool showFinalBar;
   final Size size;
   final TabContext tabContext;
 
   const _EmptyMeasureChart({
     required this.instrument,
-    required this.last,
+    required this.showFinalBar,
     required this.size,
     required this.tabContext,
   });
@@ -127,7 +241,7 @@ class _EmptyMeasureChart extends StatelessWidget {
           painter: MeasureChartPainter(
             chartPositioning: chartPositioning,
             instrument: instrument,
-            repeatEndOrLastMeasure: last,
+            showFinalBarOrRepeatEnd: showFinalBar,
             tabContext: tabContext,
           ),
         );

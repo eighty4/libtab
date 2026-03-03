@@ -2,8 +2,19 @@
 
 ## [Unreleased]
 
+### Added
+
+* MeasureChart.withMetronome, MeasureProgress and Metronome APIs to display timing feedback
+  with a horizontal progress bar synced with Metronome
+
+### Changed
+
 * MeasureChartPointer has removed the fixed-position Measure argument for the default constructor
   with an addition of MeasureChartPointer.forMeasure to use the original signature
+* Upgrade to Flutter 3.38 and dart 3.10 minimum versions
+
+### Deprecated
+
 * Deprecated MeasureDisplay in favor of MeasureChart.singleMeasure
 * Deprecated Song and SongDisplay to simplify library and remove application layout features
 
