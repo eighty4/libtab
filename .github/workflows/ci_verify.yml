@@ -5,6 +5,7 @@ on:
     branches: [ main ]
     paths:
       - .github/workflows/verify.yml
+      - example/**
       - lib/**
       - test/**
       - analysis_options.yaml
@@ -13,11 +14,15 @@ on:
     branches: [ main ]
   workflow_call:
 
+env:
+  flutter_version: 3.32.4
+
 jobs:
   verified:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     needs:
       - analyze
+      - build-example
       - format
       - publish-dry-run
       - test
@@ -25,52 +30,62 @@ jobs:
       - run: echo "Green Acres is the place to be"
 
   analyze:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: flutter-actions/setup-flutter@v4
         with:
           channel: stable
-          version: 3.32.4
+          version: ${{ env.flutter_version }}
           cache-sdk: true
       - name: analyze
         run: flutter analyze
 
-  format:
-    runs-on: ubuntu-22.04
+  build-example:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: flutter-actions/setup-flutter@v4
         with:
           channel: stable
-          version: 3.32.4
+          version: ${{ env.flutter_version }}
+          cache-sdk: true
+      - name: analyze
+        run: flutter build web
+        working-directory: example
+
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: flutter-actions/setup-flutter@v4
+        with:
+          channel: stable
+          version: ${{ env.flutter_version }}
           cache-sdk: true
       - name: format
         run: dart format example/lib lib test --set-exit-if-changed
 
   test:
-    runs-on: ubuntu-22.04
-    strategy:
-      matrix:
-        flutter-version: [ '3.32.4' ]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: flutter-actions/setup-flutter@v4
         with:
           channel: stable
-          version: ${{ matrix.flutter-version }}
+          version: ${{ env.flutter_version }}
           cache-sdk: true
       - name: test
         run: flutter test
 
   publish-dry-run:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: flutter-actions/setup-flutter@v4
         with:
           channel: stable
-          version: 3.32.4
+          version: ${{ env.flutter_version }}
           cache-sdk: true
       - name: publish dry run
         run: flutter packages pub publish --dry-run

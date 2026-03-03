@@ -23,7 +23,7 @@ jobs:
           ref: ${{ inputs.git_tag }}
       - uses: actions/setup-node@v4
         with:
-          node-version: 23
+          node-version: 24
       - run: npm i -g @eighty4/changelog
       - id: notes
         env:
