@@ -55,6 +55,8 @@ fi
 
 # run through all the checks done for ci
 
+(cd example/single_measure_chart && dart pub get)
+
 flutter test
 flutter analyze
-dart format example/lib lib test --set-exit-if-changed
+dart format example lib test --set-exit-if-changed

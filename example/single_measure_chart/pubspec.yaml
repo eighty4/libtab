@@ -1,4 +1,4 @@
-name: libtab_examples
+name: libtab_examples_single_measure_chart
 description: "Examples for pub.dev package libtab"
 publish_to: 'none'
 version: 1.0.0+1
@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   libtab:
-    path: ..
+    path: ../..
 
 dev_dependencies:
   flutter_test:

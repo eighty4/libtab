@@ -42,6 +42,10 @@ jobs:
         run: flutter analyze
 
   build-example:
+    strategy:
+      matrix:
+        example:
+          - single_measure_chart
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -50,9 +54,12 @@ jobs:
           channel: stable
           version: ${{ env.flutter_version }}
           cache-sdk: true
-      - name: analyze
-        run: flutter build web
-        working-directory: example
+      - name: build
+        run: |
+          flutter create .
+          flutter pub get
+          flutter build web
+        working-directory: example/${{ matrix.example }}
 
   format:
     runs-on: ubuntu-latest

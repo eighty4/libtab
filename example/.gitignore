@@ -1,0 +1,16 @@
+# to minify examples footprint in repo and pub.dev publishing
+# ignoring all platform and tooling resources created with `flutter create .`
+
+*/android
+*/ios
+*/linux
+*/macos
+*/web
+*/windows
+
+*/test
+
+*/.gitignore
+*/.metadata
+*/analysis_options.yaml
+*/pubspec.lock
